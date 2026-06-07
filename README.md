@@ -33,5 +33,10 @@ O projeto encontra-se em **fase ativa de desenvolvimento (MVP)**.
 - [ ] Integração de reprodutor avançado (Hls.js / Video.js) para maior suporte a streams
 - [ ] Sistema de busca interna e salvamento de favoritos
 
+
+### 🔄 O que já está pronto:
+* **`iptv-player.html`**: Interface inicial com decoder integrado para reprodução estável de transmissões ao vivo.
+* **`proxy_server.py`**: Script em Python responsável por receber as requisições do navegador, buscar os dados do fluxo IPTV e devolver os dados burlando o bloqueio de CORS.
+
 ---
 

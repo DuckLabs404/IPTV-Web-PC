@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
 <style>
 :root{
   --bg:#080b10;
@@ -313,6 +314,78 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
 .empty-ico{font-size:40px;opacity:.25;margin-bottom:12px}
 .empty p{font-size:12px;line-height:1.7;opacity:.8}
 
+.cat-edit-btn{
+  font-size:13px;color:var(--text3);padding:0 2px;border-radius:3px;
+  cursor:pointer;line-height:1;opacity:0;transition:opacity .15s;
+}
+.cat-item:hover .cat-edit-btn{opacity:1}
+
+/* ── CAT MANAGER MODAL ── */
+.modal-bg{
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
+  z-index:500;align-items:center;justify-content:center;
+  backdrop-filter:blur(4px);
+}
+.modal-bg.show{display:flex}
+.modal{
+  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
+  width:480px;max-height:80vh;display:flex;flex-direction:column;
+  box-shadow:0 20px 60px rgba(0,0,0,.6);
+}
+.modal-head{
+  padding:16px 20px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;flex-shrink:0;
+}
+.modal-head h3{font-family:var(--font-head);font-size:15px;font-weight:700;flex:1}
+.modal-close{background:var(--bg3);border:none;color:var(--text2);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-body{flex:1;overflow-y:auto;padding:12px}
+.modal-body::-webkit-scrollbar{width:3px}
+.modal-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.modal-tip{font-size:11px;color:var(--text3);padding:0 4px 10px;line-height:1.6}
+
+.cat-row{
+  display:flex;align-items:center;gap:8px;
+  padding:7px 8px;border-radius:7px;border:1px solid var(--border);
+  margin-bottom:5px;background:var(--bg3);cursor:default;
+  transition:background .1s;
+}
+.cat-row:hover{background:var(--bg4)}
+.cat-row.hidden-row{opacity:.45}
+.drag-handle{color:var(--text3);cursor:grab;font-size:14px;flex-shrink:0;user-select:none}
+.drag-handle:active{cursor:grabbing}
+.cat-row-ico{font-size:14px;flex-shrink:0}
+.cat-row-name{flex:1;min-width:0}
+.cat-row-orig{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-row-label{font-size:10px;color:var(--accent);margin-top:1px}
+.cat-row-count{font-size:10px;color:var(--text3);flex-shrink:0}
+.icon-btn{background:transparent;border:1px solid var(--border);color:var(--text3);width:26px;height:26px;border-radius:5px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.icon-btn:hover{background:var(--bg2);color:var(--text)}
+.icon-btn.active{background:rgba(255,61,87,.1);border-color:rgba(255,61,87,.3);color:var(--red)}
+.modal-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
+.modal-btn{flex:1;padding:9px;border-radius:7px;border:none;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer}
+.modal-btn.primary{background:var(--accent);color:#000}
+.modal-btn.primary:hover{background:#33eaff}
+.modal-btn.sec{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.modal-btn.sec:hover{background:var(--bg4)}
+
+/* ── QUICK RENAME POPUP ── */
+.rename-popup{
+  position:fixed;background:var(--bg2);border:1px solid var(--border2);
+  border-radius:9px;padding:12px;z-index:600;box-shadow:0 8px 30px rgba(0,0,0,.5);
+  width:220px;display:none;
+}
+.rename-popup.show{display:block}
+.rename-popup input{
+  width:100%;background:var(--bg3);border:1px solid var(--border2);
+  border-radius:6px;padding:7px 10px;color:var(--text);font-size:13px;
+  outline:none;font-family:var(--font-body);margin-bottom:8px;
+}
+.rename-popup input:focus{border-color:var(--accent)}
+.rename-popup-row{display:flex;gap:6px}
+.rp-btn{flex:1;padding:6px;border-radius:5px;border:none;font-size:12px;cursor:pointer;font-family:var(--font-body)}
+.rp-ok{background:var(--accent);color:#000;font-weight:600}
+.rp-cancel{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+
 /* ── NOTIF ── */
 .toast{
   position:fixed;bottom:20px;right:20px;
@@ -411,6 +484,7 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
       <div class="vid-error" id="verr">
         <div class="vid-error-icon">⚠️</div>
         <div class="vid-error-msg" id="verr-msg">Não foi possível reproduzir este stream.</div>
+        <div style="font-size:11px;color:var(--text3);margin-top:4px;max-width:300px;text-align:center;line-height:1.6" id="verr-tip"></div>
         <button class="vid-error-retry" onclick="retryStream()">↺ Tentar novamente</button>
       </div>
     </div>
@@ -575,6 +649,33 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
 <div class="toast" id="toast"></div>
 <div class="drag-ov" id="drag-ov">Solte o arquivo .m3u aqui</div>
 
+<!-- CAT MANAGER MODAL -->
+<div class="modal-bg" id="cat-modal-bg" onclick="if(event.target===this)closeCatManager()">
+  <div class="modal">
+    <div class="modal-head">
+      <h3>✏️ Organizar Categorias</h3>
+      <button class="modal-close" onclick="closeCatManager()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-tip">Arraste para reordenar · Clique no nome para renomear · 👁 para ocultar/mostrar</div>
+      <div id="cat-manager-list"></div>
+    </div>
+    <div class="modal-foot">
+      <button class="modal-btn sec" onclick="resetCatPrefs()">↺ Resetar tudo</button>
+      <button class="modal-btn primary" onclick="closeCatManager()">✓ Pronto</button>
+    </div>
+  </div>
+</div>
+
+<!-- QUICK RENAME POPUP -->
+<div class="rename-popup" id="rename-popup">
+  <input type="text" id="rename-input" placeholder="Novo nome...">
+  <div class="rename-popup-row">
+    <button class="rp-btn rp-ok" onclick="confirmRename()">✓ Ok</button>
+    <button class="rp-btn rp-cancel" onclick="closeRename()">Cancelar</button>
+  </div>
+</div>
+
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
 const S = {
@@ -583,12 +684,30 @@ const S = {
   lCats:[], mCats:[], sCats:[],
   aLC:null, aMC:null, aSC:null,
   cfg:{ autoplay:true, resume:true },
-  currentUrl: null,
-  hlsInst: null
+  // catPrefs: { 'NomeOriginal': { label:'NomeCustom', hidden:false, order:0 } }
+  catPrefs: {},
+  currentUrl: null, currentName: null, currentSub: null,
+  hlsInst: null,
+  tsInst: null
 };
 try{ S.playlists=JSON.parse(localStorage.getItem('sb_pl')||'[]'); }catch(e){}
 try{ Object.assign(S.cfg,JSON.parse(localStorage.getItem('sb_cfg')||'{}')); }catch(e){}
-function persist(){ localStorage.setItem('sb_pl',JSON.stringify(S.playlists)); localStorage.setItem('sb_cfg',JSON.stringify(S.cfg)); }
+try{ Object.assign(S.catPrefs,JSON.parse(localStorage.getItem('sb_cats')||'{}')); }catch(e){}
+function persist(){
+  localStorage.setItem('sb_pl',JSON.stringify(S.playlists));
+  localStorage.setItem('sb_cfg',JSON.stringify(S.cfg));
+  localStorage.setItem('sb_cats',JSON.stringify(S.catPrefs));
+}
+
+// Helpers para prefs de categoria
+function getCatLabel(orig){ return (S.catPrefs[orig]&&S.catPrefs[orig].label)||orig; }
+function isCatHidden(orig){ return !!(S.catPrefs[orig]&&S.catPrefs[orig].hidden); }
+function getCatOrder(orig){ return (S.catPrefs[orig]&&S.catPrefs[orig].order!=null)?S.catPrefs[orig].order:9999; }
+function setCatPref(orig, key, val){
+  if(!S.catPrefs[orig]) S.catPrefs[orig]={};
+  S.catPrefs[orig][key]=val;
+  persist();
+}
 
 // ─── PAGES ───────────────────────────────────────────────────────────────────
 function switchPage(id,btn){
@@ -607,94 +726,262 @@ function switchTab(tab,btn){
 
 
 // ─── PROXY HELPER ────────────────────────────────────────────────────────────
-// Se rodando via proxy_server.py (localhost:8888), redireciona streams pelo proxy
-// para resolver CORS. Fora disso, usa URL direta.
+const IS_PROXY = window.location.port === '8888' && window.location.hostname === 'localhost';
+const PROXY_BASE = 'http://localhost:8888';
+
+// Converte URL de stream para passar pelo proxy local
 function proxyUrl(url) {
-  const isLocalProxy = window.location.port === '8888' && window.location.hostname === 'localhost';
-  if (isLocalProxy) {
-    return 'http://localhost:8888/proxy?url=' + encodeURIComponent(url);
-  }
-  return url;
+  if (!IS_PROXY) return url;
+  return PROXY_BASE + '/proxy?url=' + encodeURIComponent(url);
+}
+
+// Converte URL de playlist M3U para ser reescrita pelo proxy
+function proxyPlaylistUrl(url) {
+  if (!IS_PROXY) return url;
+  return PROXY_BASE + '/playlist?url=' + encodeURIComponent(url);
 }
 
 // ─── HLS PLAYER ──────────────────────────────────────────────────────────────
+function detectStreamType(url) {
+  // Extrai a URL real (pode estar codificada dentro de /proxy?url=...)
+  let inner = url;
+  try {
+    const urlObj = new URL(url);
+    const param = urlObj.searchParams.get('url');
+    if (param) inner = decodeURIComponent(param);
+  } catch(e) {}
+  const u = inner.toLowerCase().split('?')[0]; // ignora query string para detectar extensão
+  if (u.endsWith('.m3u8') || inner.includes('type=m3u')) return 'hls';
+  if (u.endsWith('.mp4') || u.endsWith('.mkv') || u.endsWith('.avi')) return 'mp4';
+  if (u.endsWith('.ts') || inner.includes('output=ts') || inner.includes('output=mpegts')) return 'mpegts';
+  // Sem extensão clara:
+  // - Se tem output=ts/mpegts na query → mpegts
+  // - Senão → tenta nativo primeiro (pode ser MP4 sem extensão, como Crunchyroll via IPTV)
+  if(inner.includes('output=ts') || inner.includes('output=mpegts') || inner.includes('/mpegts')) return 'mpegts';
+  return 'native_first'; // sem pista → nativo primeiro
+}
+
+function destroyPlayers() {
+  if (S.hlsInst)  { try{ S.hlsInst.destroy(); }catch(e){} S.hlsInst = null; }
+  if (S.tsInst)   { try{ S.tsInst.destroy(); }catch(e){} S.tsInst = null; }
+}
+
 function playStream(url, name, sub){
-  url = proxyUrl(url);
+  // Proxifica se necessário
+  if(IS_PROXY && !url.startsWith('http://localhost')){
+    url = proxyUrl(url);
+  }
+
   const vid = document.getElementById('vid');
-  const vph = document.getElementById('vph');
-  const verr = document.getElementById('verr');
-
-  vph.style.display = 'none';
-  verr.classList.remove('show');
+  document.getElementById('vph').style.display = 'none';
+  document.getElementById('verr').classList.remove('show');
   S.currentUrl = url;
+  S.currentName = name;
+  S.currentSub = sub;
 
-  // Destroy previous HLS instance
-  if(S.hlsInst){ S.hlsInst.destroy(); S.hlsInst = null; }
-
-  // Detect stream type
-  const isHLS = url.includes('.m3u8') || url.includes('type=m3u');
-  const isTS  = url.includes('.ts') || url.includes('output=ts') || url.includes('output=mpegts');
+  destroyPlayers();
 
   vid.style.display = 'block';
   vid.volume = parseFloat(document.querySelector('.vol-row input').value);
+  vid.removeAttribute('src');
+  vid.load();
 
-  if(Hls.isSupported()){
-    // Use HLS.js for both HLS and MPEG-TS streams
-    const hls = new Hls({
-      enableWorker: true,
-      lowLatencyMode: true,
-      maxBufferLength: 30,
-      maxMaxBufferLength: 60,
-    });
-    S.hlsInst = hls;
-    hls.loadSource(url);
-    hls.attachMedia(vid);
-    hls.on(Hls.Events.MANIFEST_PARSED, ()=>{
-      if(S.cfg.autoplay) vid.play().catch(()=>{});
-    });
-    hls.on(Hls.Events.ERROR, (ev, data)=>{
-      if(data.fatal){
-        // Try native as fallback
-        hls.destroy(); S.hlsInst = null;
-        tryNative(vid, url);
-      }
-    });
-  } else if(vid.canPlayType('application/vnd.apple.mpegurl')){
-    // Native HLS (Safari)
-    vid.src = url;
-    if(S.cfg.autoplay) vid.play().catch(()=>{});
+  const type = detectStreamType(url);
+  // Extrai URL real para análise (pode estar dentro de /proxy?url=...)
+  let inner2 = url;
+  try { const _u = new URL(url); inner2 = _u.searchParams.get('url') || url; } catch(e){}
+  console.log('▶ Playing', type.toUpperCase(), '→', inner2.substring(0,90));
+
+  // Determina se é ao vivo (canais) ou VOD (filmes/séries)
+  const isLiveStream = !!(
+    url.includes('output=ts') || url.includes('output=mpegts') ||
+    (inner2 && inner2.match(/\/\d+\/\d+\/\d+\.ts/))  // padrão URL canal live
+  );
+
+  if (type === 'hls') {
+    playHLS(vid, url);
+  } else if (type === 'mp4') {
+    // MP4: tenta nativo (Chrome suporta H.264), falha → mpegts.js
+    tryNative(vid, url);
+  } else if (type === 'mpegts' && typeof mpegts !== 'undefined' && mpegts.isSupported()) {
+    playMpegTS(vid, url, isLiveStream);
+  } else if (type === 'native_first') {
+    // URL sem extensão: tenta nativo primeiro, se falhar → mpegts → hls
+    tryNative(vid, url);
   } else {
     tryNative(vid, url);
   }
-
-  vid.onerror = ()=>{
-    if(!S.hlsInst){
-      showVidError('Formato não suportado pelo navegador. Tente outro canal ou use VLC.');
-    }
-  };
 
   document.getElementById('np-title').textContent = name;
   document.getElementById('np-sub').textContent = sub||'';
   notify('▶ '+name);
 }
 
-function tryNative(vid, url){
-  vid.src = url;
-  vid.load();
-  if(S.cfg.autoplay) vid.play().catch(e=>{
-    showVidError('Stream não pôde ser reproduzido. Possíveis causas: formato não suportado, CORS ou stream offline.');
+function playHLS(vid, url) {
+  if (!Hls.isSupported()) { tryNative(vid, url); return; }
+  const hls = new Hls({
+    enableWorker: true,
+    lowLatencyMode: false,
+    maxBufferLength: 15,
+    maxMaxBufferLength: 60,
+    manifestLoadingTimeOut: 15000,
+    manifestLoadingMaxRetry: 3,
+    fragLoadingTimeOut: 20000,
+    fragLoadingMaxRetry: 3,
+    startLevel: -1,
+    xhrSetup: function(xhr) {
+      xhr.withCredentials = false;
+    }
+  });
+  S.hlsInst = hls;
+  hls.loadSource(url);
+  hls.attachMedia(vid);
+  hls.on(Hls.Events.MANIFEST_PARSED, () => {
+    console.log('HLS manifest OK');
+    if(S.cfg.autoplay) vid.play().catch(()=>{});
+  });
+  hls.on(Hls.Events.ERROR, (ev, data) => {
+    if (!data.fatal) return;
+    console.warn('HLS fatal:', data.type, data.details);
+    if (data.type === Hls.ErrorTypes.MEDIA_ERROR) {
+      hls.recoverMediaError();
+    } else {
+      hls.destroy(); S.hlsInst = null;
+      // Fallback: tenta como MPEG-TS
+      console.log('HLS falhou, tentando como MPEG-TS...');
+      if (typeof mpegts !== 'undefined' && mpegts.isSupported()) {
+        playMpegTS(vid, url);
+      } else {
+        showVidError('Stream HLS indisponível. Tente outro canal.');
+      }
+    }
   });
 }
 
-function showVidError(msg){
+function playMpegTS(vid, url, isLive) {
+  // Extrai URL real (pode estar codificada em /proxy?url=...)
+  let rawUrl = url;
+  try { const _u = new URL(url); rawUrl = _u.searchParams.get('url') || url; } catch(e){}
+  const rawLower = rawUrl.toLowerCase().split('?')[0];
+
+  if(isLive === undefined){
+    isLive = !rawLower.match(/\.mp4|\.mkv|\.avi|\.mov/);
+  }
+
+  // Tipo correto para mpegts.js
+  let tsType = 'mpegts';
+  if(rawLower.endsWith('.mp4')) tsType = 'mp4';
+
+  console.log(`mpegts.js — type:${tsType} isLive:${isLive} → ${rawUrl.substring(0,70)}`);
+
+  try {
+    const player = mpegts.createPlayer({
+      type: tsType,
+      isLive: isLive,
+      url: url,
+    }, {
+      enableWorker: true,
+      lazyLoadMaxDuration: isLive ? 3*60 : 10*60,
+      liveBufferLatencyChasing: isLive,
+      liveBufferLatencyMaxLatency: 8.0,
+      liveBufferLatencyMinRemain: 2.0,
+      stashInitialSize: isLive ? 128 : 512,
+      autoCleanupSourceBuffer: true,
+      deferLoadAfterSourceOpen: false,
+    });
+    S.tsInst = player;
+    player.attachMediaElement(vid);
+    player.load();
+
+    // Watchdog: se depois de 8s o vídeo não avançou nada → tela cinza → tenta HLS
+    const watchdog = setTimeout(() => {
+      if(S.tsInst !== player) return; // já foi trocado
+      if(vid.readyState < 2 || vid.currentTime === 0){
+        console.warn('mpegts watchdog: stalled após 8s, tentando HLS...');
+        player.destroy(); S.tsInst = null;
+        if(Hls.isSupported()){
+          playHLS(vid, url);
+        } else {
+          showVidError('Não foi possível reproduzir. Tente outro episódio ou abra no VLC.');
+        }
+      }
+    }, 8000);
+
+    player.on(mpegts.Events.ERROR, (errType, errDetail, info) => {
+      clearTimeout(watchdog);
+      console.error('mpegts error:', errType, errDetail, info);
+      player.destroy(); S.tsInst = null;
+      if(errType === mpegts.ErrorTypes.NETWORK_ERROR){
+        const status = info && info.code ? ` (HTTP ${info.code})` : '';
+        showVidError(`Conteúdo indisponível${status}. Episódio offline ou fora do plano.`);
+      } else if(errType === mpegts.ErrorTypes.MEDIA_ERROR){
+        console.log('mpegts MEDIA_ERROR → tentando HLS...');
+        if(Hls.isSupported()){ playHLS(vid, url); }
+        else { showVidError('Codec não suportado (H.265/HEVC). Abra no VLC.'); }
+      } else {
+        showVidError('Erro ao carregar. Tente novamente.');
+      }
+    });
+
+    // Limpa watchdog quando começar a reproduzir
+    vid.addEventListener('playing', () => clearTimeout(watchdog), {once:true});
+    vid.addEventListener('timeupdate', () => clearTimeout(watchdog), {once:true});
+
+    if(S.cfg.autoplay) vid.play().catch(e => {
+      if(e.name !== 'NotAllowedError') console.warn('play():', e.message);
+    });
+  } catch(e) {
+    console.error('mpegts.js exception:', e);
+    tryNative(vid, url);
+  }
+}
+
+function tryNative(vid, url){
+  vid.src = url;
+  vid.load();
+  vid.onerror = null;
+  if(S.cfg.autoplay){
+    vid.play().catch(e=>{
+      if(e.name === 'NotAllowedError') return; // só política de autoplay, não é erro
+      console.warn('play() rejected:', e.name, e.message);
+    });
+  }
+  vid.addEventListener('error', function onErr(){
+    vid.removeEventListener('error', onErr);
+    const code = vid.error ? vid.error.code : 0;
+    console.warn('video error code:', code, vid.error);
+    if(code === 3 || code === 4){
+      if(typeof mpegts !== 'undefined' && mpegts.isSupported()){
+        console.log('Native falhou (código '+code+'), tentando mpegts.js...');
+        playMpegTS(vid, url, false); // VOD — não é live
+        return;
+      }
+    }
+    const msgs = {1:'Carregamento cancelado.',2:'Erro de rede.',3:'Formato não suportado.',4:'Conteúdo indisponível.'};
+    showVidError((msgs[code]||'Erro desconhecido.')+' Tente outro episódio.');
+  }, {once: true});
+}
+
+function showVidError(msg, tip){
   document.getElementById('verr-msg').textContent = msg;
+  const tipEl = document.getElementById('verr-tip');
+  if(tipEl) tipEl.textContent = tip || '';
   document.getElementById('verr').classList.add('show');
 }
 
+// Testa se uma URL está acessível pelo proxy e retorna status
+async function checkUrl(url){
+  try{
+    const proxyCheck = IS_PROXY
+      ? `http://localhost:8888/proxy?url=${encodeURIComponent(url)}`
+      : url;
+    const r = await fetch(proxyCheck, {method:'HEAD', signal: AbortSignal.timeout(8000)});
+    return r.status;
+  } catch(e){ return 0; }
+}
+
 function retryStream(){
-  if(S.currentUrl) playStream(S.currentUrl,
-    document.getElementById('np-title').textContent,
-    document.getElementById('np-sub').textContent);
+  if(S.currentUrl) playStream(S.currentUrl, S.currentName||'', S.currentSub||'');
 }
 
 function setVol(v){
@@ -717,6 +1004,27 @@ const PROXIES=[
   u=>`https://proxy.cors.sh/${u}`,
 ];
 async function fetchM3U(url, onP){
+  // Se proxy local ativo, usa o endpoint /playlist que baixa e reescreve o M3U
+  if(IS_PROXY){
+    if(onP) onP('Baixando via proxy local...', 30);
+    const proxyPL = proxyPlaylistUrl(url);
+    try{
+      const ctrl = new AbortController();
+      const t = setTimeout(()=>ctrl.abort(), 30000);
+      const r = await fetch(proxyPL, {signal: ctrl.signal});
+      clearTimeout(t);
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const txt = await r.text();
+      if(!txt || txt.length < 10) throw new Error('Resposta vazia');
+      if(onP) onP('Playlist recebida...', 65);
+      return txt;
+    }catch(e){
+      console.warn('Proxy playlist failed, trying direct:', e.message);
+      // fallthrough para tentativa direta
+    }
+  }
+
+  // Sem proxy: tenta direto + proxies CORS externos
   let lastErr='';
   for(let i=0;i<PROXIES.length;i++){
     const pu=PROXIES[i](url);
@@ -844,13 +1152,43 @@ function ico(g){const k=Object.keys(ICONS).find(k=>g.toLowerCase().includes(k));
 function buildLiveCats(){
   const cnt={};S.channels.forEach(c=>{cnt[c.group]=(cnt[c.group]||0)+1;});
   const el=document.getElementById('cat-list');
-  el.innerHTML='<div class="cat-label">Categorias</div>'+
-    [{name:'Todos os Canais',all:true,count:S.channels.length},...S.lCats.map(g=>({name:g,count:cnt[g]||0}))]
-    .map((c,i)=>`<div class="cat-item${i===0?' active':''}" onclick="selCat(${c.all?'null':`'${esc(c.name)}'`},this)">
-      <div class="cat-ico">${c.all?'📡':ico(c.name)}</div>
-      <div class="cat-n">${c.name}</div>
-      <div class="cat-cnt">${c.count}</div>
-    </div>`).join('');
+
+  // Ordena por preferência do usuário, depois alfabético
+  const sorted = [...S.lCats].sort((a,b)=>{
+    const oa=getCatOrder(a), ob=getCatOrder(b);
+    if(oa!==ob) return oa-ob;
+    return getCatLabel(a).localeCompare(getCatLabel(b));
+  });
+  // Separa visíveis e ocultas
+  const visible = sorted.filter(g=>!isCatHidden(g));
+  const hidden  = sorted.filter(g=>isCatHidden(g));
+
+  const makeCatItem = (g, i, isAll) => {
+    const label = isAll ? 'Todos os Canais' : getCatLabel(g);
+    const count = isAll ? S.channels.length : (cnt[g]||0);
+    const onclick = isAll ? 'null' : `'${esc(g)}'`;
+    return `<div class="cat-item${i===0?' active':''}" data-cat="${esc(g||'__all__')}"
+      onclick="selCat(${onclick},this)">
+      <div class="cat-ico">${isAll?'📡':ico(g)}</div>
+      <div class="cat-n">${esc(label)}</div>
+      <div style="display:flex;align-items:center;gap:4px;margin-left:auto">
+        <div class="cat-cnt">${count}</div>
+        ${isAll?'':`<div class="cat-edit-btn" onclick="event.stopPropagation();openCatMenu('${esc(g)}',this)" title="Editar">⋯</div>`}
+      </div>
+    </div>`;
+  };
+
+  el.innerHTML =
+    '<div class="cat-label" style="display:flex;align-items:center;justify-content:space-between">'+
+      '<span>Categorias</span>'+
+      '<span style="font-size:10px;color:var(--accent);cursor:pointer;text-transform:none;letter-spacing:0" onclick="openCatManager()">✏️ Organizar</span>'+
+    '</div>'+
+    makeCatItem(null, 0, true)+
+    visible.map((g,i)=>makeCatItem(g, i+1, false)).join('')+
+    (hidden.length?`<div class="cat-label" style="margin-top:8px">Ocultas (${hidden.length})</div>`+
+      hidden.map((g,i)=>makeCatItem(g,i,false)).join(''):'');
+
+  selCat(null, el.querySelector('.cat-item'));;
   selCat(null,el.querySelector('.cat-item'));
 }
 function selCat(cat,el){
@@ -943,12 +1281,54 @@ function searchVOD(type,q){
   const base=type==='movies'?(S.aMC?S.movies.filter(m=>m.group===S.aMC):S.movies):(S.aSC?S.series.filter(s=>s.group===S.aSC):S.series);
   renderVOD(type,q?base.filter(m=>m.name.toLowerCase().includes(q.toLowerCase())):base);
 }
-function playVOD(url,name,grp){
+async function playVOD(url,name,grp){
   switchPage('live',document.querySelector('[data-page="live"]'));
-  playStream(url,name,grp);
+  // Para VOD, faz uma verificação rápida antes (sem bloquear muito)
+  playStream(url, name, grp);
+  // Verificação em background — não bloqueia reprodução
+  if(IS_PROXY){
+    const rawUrl = url.startsWith('http://localhost') 
+      ? decodeURIComponent(new URL(url).searchParams.get('url')||url)
+      : url;
+    try {
+      const status = await checkUrl(rawUrl);
+      if(status === 403){
+        showVidError('Acesso negado (403). Este conteúdo não está incluído no seu plano.', 'Entre em contato com seu provedor IPTV para verificar seu pacote.');
+      } else if(status === 404){
+        showVidError('Episódio não encontrado (404). Pode ter sido removido do servidor.', 'Tente recarregar a playlist ou escolha outro episódio.');
+      } else if(status === 0){
+        // timeout/offline — deixa o erro natural do player aparecer
+        console.log('VOD check: sem resposta (offline ou timeout)');
+      }
+    } catch(e){}
+  }
 }
 
 // ─── SAVED ───────────────────────────────────────────────────────────────────
+// Recarrega a última playlist usada (links frescos)
+async function reloadLastPlaylist(){
+  if(!S.playlists.length){ notify('Nenhuma playlist salva'); return; }
+  const last = S.playlists[S.playlists.length-1];
+  if(!last.url){ notify('Playlist local — reimporte o arquivo .m3u'); return; }
+
+  const btn = document.getElementById('reload-btn');
+  if(btn){ btn.textContent = '⏳ Atualizando...'; btn.disabled = true; }
+  setStatus(false, 'Atualizando playlist...');
+
+  try{
+    const txt = await fetchM3U(last.url, (l,p) => setP(l,p));
+    const s = await processPlaylist(last, txt);
+    notify(`✓ Playlist atualizada! ${(s.ch+s.mv+s.sr).toLocaleString()} itens`);
+    setStatus(true, `${(s.ch+s.mv+s.sr).toLocaleString()} itens`);
+  } catch(e){
+    notify('Erro ao recarregar: ' + e.message);
+    setStatus(false, 'Erro ao recarregar');
+  } finally {
+    if(btn){ btn.textContent = '↺ Recarregar'; btn.disabled = false; }
+    hideP();
+  }
+}
+
 function renderSaved(){
   const wrap=document.getElementById('saved-wrap'),list=document.getElementById('saved-list');
   if(!S.playlists.length){wrap.style.display='none';return;}
@@ -1001,6 +1381,134 @@ function setBtnLoad(id,on){ const e=document.getElementById(id); if(!e) return; 
 function v(id){ return document.getElementById(id)?.value||''; }
 function esc(s){ return (s||'').replace(/\\/g,'\\\\').replace(/'/g,"\\'").replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
 
+// ─── CATEGORY MANAGER ────────────────────────────────────────────────────────
+let _renameTarget = null;
+
+function openCatManager(){
+  const list = document.getElementById('cat-manager-list');
+  const cnt = {};
+  S.channels.forEach(c=>{ cnt[c.group]=(cnt[c.group]||0)+1; });
+
+  const sorted = [...S.lCats].sort((a,b)=>{
+    const oa=getCatOrder(a), ob=getCatOrder(b);
+    if(oa!==ob) return oa-ob;
+    return getCatLabel(a).localeCompare(getCatLabel(b));
+  });
+
+  list.innerHTML = sorted.map((g,i) => {
+    const label = getCatLabel(g);
+    const hidden = isCatHidden(g);
+    const count = cnt[g]||0;
+    const renamed = label !== g;
+    return `<div class="cat-row${hidden?' hidden-row':''}" data-orig="${esc(g)}" data-order="${i}">
+      <div class="drag-handle" title="Arrastar para reordenar">⠿</div>
+      <div class="cat-row-ico">${ico(g)}</div>
+      <div class="cat-row-name" style="cursor:pointer" onclick="openRename('${esc(g)}',this)" title="Clique para renomear">
+        <div class="cat-row-orig">${esc(label)}</div>
+        ${renamed?`<div class="cat-row-label">original: ${esc(g)}</div>`:''}
+      </div>
+      <div class="cat-row-count">${count}</div>
+      <button class="icon-btn${hidden?' active':''}" onclick="toggleCatHidden('${esc(g)}',this)" title="${hidden?'Mostrar':'Ocultar'}">
+        ${hidden?'🙈':'👁'}
+      </button>
+    </div>`;
+  }).join('');
+
+  // Init drag-and-drop sorting
+  initDragSort(list);
+  document.getElementById('cat-modal-bg').classList.add('show');
+}
+
+function closeCatManager(){
+  document.getElementById('cat-modal-bg').classList.remove('show');
+  buildLiveCats(); // re-render com nova ordem
+}
+
+function toggleCatHidden(orig, btn){
+  const row = btn.closest('.cat-row');
+  const isHidden = isCatHidden(orig);
+  setCatPref(orig, 'hidden', !isHidden);
+  row.classList.toggle('hidden-row', !isHidden);
+  btn.textContent = isHidden ? '👁' : '🙈';
+  btn.classList.toggle('active', !isHidden);
+}
+
+function openRename(orig, el){
+  _renameTarget = orig;
+  const popup = document.getElementById('rename-popup');
+  const input = document.getElementById('rename-input');
+  input.value = getCatLabel(orig);
+  // Position popup near clicked element
+  const rect = el.getBoundingClientRect();
+  popup.style.top = (rect.bottom + 6) + 'px';
+  popup.style.left = Math.min(rect.left, window.innerWidth - 230) + 'px';
+  popup.classList.add('show');
+  input.focus();
+  input.select();
+}
+// Also support openCatMenu (quick inline)
+function openCatMenu(orig, btn){
+  openRename(orig, btn);
+}
+
+function confirmRename(){
+  if(!_renameTarget) return;
+  const val = document.getElementById('rename-input').value.trim();
+  if(val && val !== _renameTarget) setCatPref(_renameTarget, 'label', val);
+  else if(!val) { delete (S.catPrefs[_renameTarget]||{}).label; persist(); }
+  closeRename();
+  // Update open manager list if visible
+  if(document.getElementById('cat-modal-bg').classList.contains('show')) openCatManager();
+  else buildLiveCats();
+}
+function closeRename(){
+  document.getElementById('rename-popup').classList.remove('show');
+  _renameTarget = null;
+}
+// Close rename on Enter/Escape
+document.addEventListener('keydown', e=>{
+  if(e.code==='Enter' && _renameTarget) confirmRename();
+  if(e.code==='Escape' && _renameTarget) closeRename();
+});
+
+function resetCatPrefs(){
+  if(!confirm('Resetar toda a organização de categorias?')) return;
+  S.catPrefs = {};
+  persist();
+  openCatManager();
+  notify('Organização resetada');
+}
+
+// ── Drag-and-drop sort ──────────────────────────────────────────────────────
+function initDragSort(container){
+  let dragging = null;
+  container.querySelectorAll('.cat-row').forEach(row => {
+    row.addEventListener('dragstart', e=>{
+      dragging = row;
+      row.style.opacity = '.4';
+      e.dataTransfer.effectAllowed = 'move';
+    });
+    row.addEventListener('dragend', ()=>{
+      row.style.opacity = '';
+      dragging = null;
+      // Save new order
+      container.querySelectorAll('.cat-row').forEach((r,i)=>{
+        setCatPref(r.dataset.orig, 'order', i);
+      });
+    });
+    row.addEventListener('dragover', e=>{
+      e.preventDefault();
+      if(dragging && dragging!==row){
+        const rect = row.getBoundingClientRect();
+        const mid = rect.top + rect.height/2;
+        if(e.clientY < mid) container.insertBefore(dragging, row);
+        else container.insertBefore(dragging, row.nextSibling);
+      }
+    });
+    row.setAttribute('draggable','true');
+  });
+}
+
 // ─── DRAG & DROP ─────────────────────────────────────────────────────────────
 document.addEventListener('dragover',e=>{e.preventDefault();document.getElementById('drag-ov').classList.add('show');});
 document.addEventListener('dragleave',e=>{if(!e.relatedTarget)document.getElementById('drag-ov').classList.remove('show');});
@@ -1030,6 +1538,11 @@ function init(){
   if(window.location.port==='8888' && window.location.hostname==='localhost'){
     document.getElementById('proxy-badge').style.display='inline';
     console.log('✅ Proxy local detectado — streams ao vivo ativados');
+  }
+  // Mostrar botão recarregar se tem playlist com URL
+  if(S.playlists.length && S.playlists[S.playlists.length-1].url){
+    const rb = document.getElementById('reload-btn');
+    if(rb) rb.style.display='inline';
   }
 
   document.getElementById('vid').style.display='none';
