@@ -24,6 +24,7 @@ Para viabilizar a reprodução estável e contornar de vez as restrições de se
 *Interface escura e minimalista, exibindo a reprodução estável de canais de TV ao vivo (Live) e o mapeamento completo e organizado de extensas listas de séries e streaming.*
 
 
+
 ## 🛠️ Recursos & Funcionalidades Atualizadas
 
 * **Nova Interface Fluida:** Layout reformulado, mais limpo e focado na experiência de navegação do usuário.
