@@ -8,35 +8,45 @@
 
 ## 🚀 Visão Geral
 
-O **IPTV-Web-PC** é um player de listas IPTV baseado na web projetado para rodar diretamente no navegador do computador de forma leve e rápida. O objetivo principal é permitir a reprodução de listas no formato `.m3u` (tanto por arquivos locais quanto por links/URLs diretas), categorizando automaticamente o conteúdo em **Canais ao Vivo**, **Séries** e **Filmes**.
+O **IPTV-Web-PC** é um player de listas IPTV baseado na web projetado para rodar diretamente no navegador de forma leve, rápida e com interface customizada. O sistema processa listas no formato `.m3u` (locais ou por URL), dividindo o conteúdo de forma inteligente e integrada.
 
-Para contornar as restrições de segurança do navegador (erros de CORS ao tentar carregar fluxos de vídeo externos), o projeto conta com um **servidor proxy local em Python**, garantindo estabilidade e autonomia na reprodução sem depender de softwares de terceiros (como VLC ou Kodi).
-
----
-
-## 🛠️ Recursos & Funcionalidades
-
-* **Suporte Híbrido de Listas:** Carregamento prático de arquivos `.m3u` locais ou via links remotos.
-* **Segmentação Automática (Roadmap):** Engine planejada para separar o conteúdo bruto em abas organizadas de canais, filmes e séries.
-* **Bypass de CORS:** Servidor proxy nativo em Python que intercepta e libera as requisições de mídia direto no browser.
-* **Player Integrado:** Interface minimalista para assistir o conteúdo sem sair da página.
+Para viabilizar a reprodução estável e contornar de vez as restrições de segurança dos navegadores (erros de CORS ao carregar streams externos), o ecossistema utiliza um **servidor proxy local em Python** trabalhando em conjunto com um **mecanismo de decoding** dedicado para transmissões ao vivo.
 
 ---
 
-## 🚧 Status Atual & Próximos Passos
+## 📸 Demonstração da Interface
 
-O projeto encontra-se em **fase ativa de desenvolvimento (MVP)**.
+<p align="center">
+  <img src="preview-player.jpg" width="65%" alt="Player Ao Vivo" title="Player Ao Vivo">
+  <img src="preview-series.png" width="30%" alt="Categorias de Séries" title="Variedade de Séries">
+</p>
 
-- [x] Estrutura base da interface web (`iptv-player.html`)
+*Interface escura e minimalista, exibindo a reprodução estável de canais de TV ao vivo (Live) e o mapeamento completo e organizado de extensas listas de séries e streaming.*
+
+
+## 🛠️ Recursos & Funcionalidades Atualizadas
+
+* **Nova Interface Fluida:** Layout reformulado, mais limpo e focado na experiência de navegação do usuário.
+* **Decoder Nativo Integrado:** Decodificação otimizada para garantir a estabilidade e a reprodução de fluxos e transmissões ao vivo (Live TV).
+* **Suporte Multi-Formato:** Player aprimorado para aceitar e processar diferentes extensões e formatos de transmissão de vídeo diretamente no client-side.
+* **Bypass de CORS:** Servidor proxy em Python (`proxy_server.py`) robusto que gerencia os cabeçalhos e requisições de mídia em tempo real.
+
+---
+
+## 🚧 Status Atual do Desenvolvimento
+
+- [x] Estrutura e Nova Interface Web (`iptv-player.html`)
+- [x] Decoder de transmissões ao vivo integrado
+- [x] Suporte a múltiplos formatos de stream
 - [x] Servidor proxy funcional de requisições (`proxy_server.py`)
-- [ ] Implementação de layout moderno com Modo Escuro (Dark Mode)
-- [ ] Integração de reprodutor avançado (Hls.js / Video.js) para maior suporte a streams
-- [ ] Sistema de busca interna e salvamento de favoritos
-
-
-### 🔄 O que já está pronto:
-* **`iptv-player.html`**: Interface inicial com decoder integrado para reprodução estável de transmissões ao vivo.
-* **`proxy_server.py`**: Script em Python responsável por receber as requisições do navegador, buscar os dados do fluxo IPTV e devolver os dados burlando o bloqueio de CORS.
+- [ ] Implementação de Modo Escuro (Dark Mode) nativo
+- [ ] Sistema de busca interna por canais/filmes e gerenciamento de favoritos
 
 ---
 
+## 💻 Como Executar o Repositório Local
+
+### 1. Clonar o Repositório
+```bash
+git clone [https://github.com/DuckLabs404/IPTV-Web-PC.git](https://github.com/DuckLabs404/IPTV-Web-PC.git)
+cd IPTV-Web-PC

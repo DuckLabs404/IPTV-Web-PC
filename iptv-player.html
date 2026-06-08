@@ -5,73 +5,96 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>StreamBox</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mpegts.js@1.7.3/dist/mpegts.min.js"></script>
 <style>
 :root{
-  --bg:#080b10;
-  --bg2:#0f1319;
-  --bg3:#161c26;
-  --bg4:#1c2332;
-  --accent:#00e5ff;
-  --accent2:#0097a7;
-  --red:#ff3d57;
-  --green:#00e676;
-  --gold:#ffd740;
-  --text:#e8edf5;
-  --text2:#7a8599;
-  --text3:#3d4860;
-  --border:rgba(255,255,255,0.05);
-  --border2:rgba(0,229,255,0.15);
-  --glow:0 0 20px rgba(0,229,255,0.2);
-  --font-head:'Syne',sans-serif;
-  --font-body:'DM Sans',sans-serif;
+  --bg:#0a0a0a;
+  --bg2:#141414;
+  --bg3:#1f1f1f;
+  --bg4:#2a2a2a;
+  --accent:#e50914;
+  --accent2:#ff3d47;
+  --gold:#f5a623;
+  --green:#46d369;
+  --blue:#0071eb;
+  --text:#ffffff;
+  --text2:#b3b3b3;
+  --text3:#6d6d6d;
+  --border:rgba(255,255,255,0.08);
+  --border2:rgba(229,9,20,0.3);
+  --font:'Outfit',sans-serif;
+  --font-mono:'DM Mono',monospace;
+  --nav-h:60px;
+  --sidebar-w:220px;
+  --ch-panel-w:240px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar{width:4px;height:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:var(--accent2)}
-
-body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+::-webkit-scrollbar-thumb:hover{background:var(--text3)}
+body{font-family:var(--font);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
 /* ── TOPBAR ── */
 .topbar{
-  display:flex;align-items:center;gap:0;
-  padding:0 20px;height:52px;
-  background:var(--bg2);
-  border-bottom:1px solid var(--border);
-  flex-shrink:0;
-  position:relative;
+  height:var(--nav-h);display:flex;align-items:center;
+  padding:0 24px;gap:0;flex-shrink:0;
+  background:linear-gradient(180deg,rgba(0,0,0,.95) 0%,rgba(0,0,0,.7) 100%);
+  border-bottom:1px solid rgba(255,255,255,.05);
+  position:relative;z-index:50;
 }
-.topbar::after{content:'';position:absolute;bottom:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--accent2),transparent);opacity:.4}
-.logo{font-family:var(--font-head);font-weight:800;font-size:17px;letter-spacing:-0.5px;color:var(--text);display:flex;align-items:center;gap:9px;flex-shrink:0;margin-right:20px}
-.logo-mark{width:28px;height:28px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center}
-.logo-mark svg{width:16px;height:16px}
-.logo span{color:var(--accent)}
-
-.nav{display:flex;gap:1px;flex:1}
+.logo{
+  font-size:22px;font-weight:900;letter-spacing:-1px;
+  color:var(--accent);text-transform:uppercase;
+  margin-right:28px;flex-shrink:0;display:flex;align-items:center;gap:8px;
+}
+.logo-icon{
+  width:32px;height:32px;background:var(--accent);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+}
+.logo-icon svg{width:18px;height:18px}
+.nav{display:flex;gap:2px;flex:1}
 .nav-btn{
-  display:flex;align-items:center;gap:7px;
-  padding:0 16px;height:52px;
+  height:var(--nav-h);padding:0 14px;
   border:none;background:transparent;
-  color:var(--text2);font-family:var(--font-body);font-size:13px;font-weight:500;
+  color:var(--text2);font-family:var(--font);font-size:13px;font-weight:500;
   cursor:pointer;transition:all .15s;position:relative;white-space:nowrap;
+  display:flex;align-items:center;gap:6px;
 }
-.nav-btn svg{width:15px;height:15px;opacity:.7;transition:opacity .15s}
-.nav-btn:hover{color:var(--text);background:rgba(255,255,255,.03)}
+.nav-btn svg{width:14px;height:14px;opacity:.6;transition:all .15s}
+.nav-btn:hover{color:var(--text)}
 .nav-btn:hover svg{opacity:1}
-.nav-btn.active{color:var(--accent)}
-.nav-btn.active svg{opacity:1;color:var(--accent)}
-.nav-btn.active::after{content:'';position:absolute;bottom:0;left:16px;right:16px;height:2px;background:var(--accent);border-radius:2px 2px 0 0;box-shadow:0 0 8px var(--accent)}
-
-.topbar-right{display:flex;align-items:center;gap:12px;margin-left:auto}
-.status-pill{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;background:var(--bg3);border:1px solid var(--border);font-size:11px;color:var(--text2)}
+.nav-btn.active{color:var(--text);font-weight:600}
+.nav-btn.active::after{
+  content:'';position:absolute;bottom:0;left:14px;right:14px;
+  height:2px;background:var(--accent);border-radius:2px 2px 0 0;
+}
+.topbar-right{display:flex;align-items:center;gap:10px;margin-left:auto}
+.status-pill{
+  display:flex;align-items:center;gap:7px;
+  padding:5px 12px;border-radius:4px;
+  background:rgba(255,255,255,.05);border:1px solid var(--border);
+  font-size:11px;font-weight:500;color:var(--text2);font-family:var(--font-mono);
+}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0}
-.dot.live{background:var(--green);box-shadow:0 0 6px var(--green);animation:blink 2s infinite}
-.dot.loading{background:var(--gold);animation:blink .5s infinite}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.dot.live{background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 2s infinite}
+.dot.loading{background:var(--gold);animation:pulse .6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.proxy-badge{
+  display:none;padding:4px 10px;border-radius:4px;
+  background:rgba(0,113,235,.2);border:1px solid rgba(0,113,235,.4);
+  color:#5ba3ff;font-size:10px;font-weight:700;letter-spacing:.5px;
+  font-family:var(--font-mono);
+}
+.reload-btn{
+  display:none;padding:5px 12px;border-radius:4px;
+  background:rgba(229,9,20,.15);border:1px solid var(--border2);
+  color:var(--accent2);font-size:11px;font-weight:600;cursor:pointer;
+  font-family:var(--font);transition:all .15s;
+}
+.reload-btn:hover{background:rgba(229,9,20,.25)}
 
 /* ── LAYOUT ── */
 .main{display:flex;flex:1;overflow:hidden}
@@ -80,72 +103,99 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
 
 /* ── SIDEBAR ── */
 .sidebar{
-  width:220px;flex-shrink:0;
+  width:var(--sidebar-w);flex-shrink:0;
   background:var(--bg2);
   border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow:hidden;
+  display:flex;flex-direction:column;overflow:hidden;
 }
-.sidebar-head{padding:12px 12px 8px;border-bottom:1px solid var(--border)}
+.sb-head{padding:12px;border-bottom:1px solid var(--border);flex-shrink:0}
 .sb-search{
-  display:flex;align-items:center;gap:7px;
+  display:flex;align-items:center;gap:8px;
   background:var(--bg3);border:1px solid var(--border);
-  border-radius:7px;padding:6px 10px;
+  border-radius:6px;padding:7px 10px;transition:border .15s;
 }
-.sb-search svg{width:13px;height:13px;color:var(--text3);flex-shrink:0}
-.sb-search input{background:none;border:none;outline:none;color:var(--text);font-size:12px;width:100%;font-family:var(--font-body)}
+.sb-search:focus-within{border-color:rgba(229,9,20,.4)}
+.sb-search svg{width:12px;height:12px;color:var(--text3);flex-shrink:0}
+.sb-search input{
+  background:none;border:none;outline:none;
+  color:var(--text);font-size:12px;width:100%;font-family:var(--font);
+}
 .sb-search input::placeholder{color:var(--text3)}
-.cat-scroller{flex:1;overflow-y:auto;padding:6px}
-.cat-label{font-size:9px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:1.2px;padding:8px 8px 4px}
+.cat-scroller{flex:1;overflow-y:auto;padding:8px 6px}
+.cat-section{font-size:9px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:1.5px;padding:10px 6px 5px;
+  display:flex;align-items:center;justify-content:space-between}
+.cat-section-action{font-size:9px;color:var(--accent);cursor:pointer;
+  text-transform:none;letter-spacing:0;font-weight:600}
 .cat-item{
   display:flex;align-items:center;gap:8px;
-  padding:6px 8px;border-radius:6px;cursor:pointer;
-  font-size:12px;color:var(--text2);transition:all .12s;
-  margin-bottom:1px;
+  padding:6px 8px;border-radius:5px;cursor:pointer;
+  font-size:12px;font-weight:400;color:var(--text2);
+  transition:all .1s;margin-bottom:1px;
 }
 .cat-item:hover{background:var(--bg3);color:var(--text)}
-.cat-item.active{background:rgba(0,229,255,.08);color:var(--accent);border:1px solid rgba(0,229,255,.1)}
-.cat-item.active .cat-ico{background:rgba(0,229,255,.15)}
-.cat-ico{width:20px;height:20px;border-radius:4px;background:var(--bg4);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.cat-item.active{background:rgba(229,9,20,.12);color:var(--text);font-weight:600}
+.cat-item.active .cat-ico{background:rgba(229,9,20,.2)}
+.cat-ico{
+  width:20px;height:20px;border-radius:4px;
+  background:var(--bg4);display:flex;align-items:center;
+  justify-content:center;font-size:11px;flex-shrink:0;
+}
 .cat-n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cat-cnt{font-size:10px;color:var(--text3);background:var(--bg4);padding:1px 5px;border-radius:8px;flex-shrink:0}
+.cat-cnt{
+  font-size:10px;color:var(--text3);
+  background:var(--bg4);padding:1px 5px;border-radius:3px;
+  font-family:var(--font-mono);flex-shrink:0;
+}
+.cat-edit-btn{
+  font-size:12px;color:var(--text3);padding:0 2px;cursor:pointer;
+  opacity:0;transition:opacity .1s;line-height:1;
+}
+.cat-item:hover .cat-edit-btn{opacity:1}
 
 /* ── CHANNEL LIST ── */
 .ch-panel{
-  width:240px;flex-shrink:0;
-  background:var(--bg);
-  border-right:1px solid var(--border);
-  display:flex;flex-direction:column;
-  overflow:hidden;
+  width:var(--ch-panel-w);flex-shrink:0;
+  background:var(--bg);border-right:1px solid var(--border);
+  display:flex;flex-direction:column;overflow:hidden;
 }
 .ch-head{
-  padding:10px 12px 9px;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:8px;
+  padding:10px 12px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
 }
-.ch-head-title{font-family:var(--font-head);font-size:13px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ch-head-count{font-size:10px;color:var(--text3);background:var(--bg3);padding:2px 7px;border-radius:8px;flex-shrink:0}
+.ch-head-title{font-size:13px;font-weight:700;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ch-head-count{
+  font-size:10px;color:var(--text3);
+  background:var(--bg3);padding:2px 7px;border-radius:3px;
+  font-family:var(--font-mono);
+}
 .ch-scroller{flex:1;overflow-y:auto}
 .ch-item{
-  display:flex;align-items:center;gap:8px;
+  display:flex;align-items:center;gap:9px;
   padding:8px 12px;cursor:pointer;
   border-bottom:1px solid var(--border);
   transition:background .1s;position:relative;
 }
 .ch-item:hover{background:var(--bg2)}
-.ch-item.active{background:rgba(0,229,255,.06)}
-.ch-item.active::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;background:var(--accent);box-shadow:0 0 6px var(--accent)}
+.ch-item.active{background:rgba(229,9,20,.08)}
+.ch-item.active::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;
+  width:2px;background:var(--accent);
+}
 .ch-logo{
-  width:34px;height:24px;border-radius:4px;
+  width:36px;height:24px;border-radius:3px;
   background:var(--bg3);display:flex;align-items:center;
-  justify-content:center;font-size:11px;flex-shrink:0;
+  justify-content:center;font-size:10px;flex-shrink:0;
   overflow:hidden;border:1px solid var(--border);
 }
 .ch-logo img{width:100%;height:100%;object-fit:contain}
 .ch-meta{flex:1;min-width:0}
-.ch-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--text)}
+.ch-name{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ch-grp{font-size:10px;color:var(--text3);margin-top:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.live-pill{font-size:9px;font-weight:700;padding:2px 5px;border-radius:3px;background:rgba(255,61,87,.15);color:var(--red);flex-shrink:0;letter-spacing:.3px}
+.live-pill{
+  font-size:9px;font-weight:800;padding:2px 5px;border-radius:2px;
+  background:var(--accent);color:white;flex-shrink:0;letter-spacing:.5px;
+}
 
 /* ── PLAYER ── */
 .player-zone{flex:1;display:flex;flex-direction:column;background:#000;overflow:hidden}
@@ -155,278 +205,367 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
   position:absolute;inset:0;
   display:flex;flex-direction:column;align-items:center;justify-content:center;
   pointer-events:none;
-  background:radial-gradient(ellipse at 50% 60%,rgba(0,229,255,.03) 0%,transparent 70%);
 }
-.vid-ph-icon{font-size:52px;margin-bottom:16px;opacity:.2}
-.vid-ph-title{font-family:var(--font-head);font-size:18px;font-weight:700;color:var(--text2);margin-bottom:6px;opacity:.6}
-.vid-ph-sub{font-size:12px;color:var(--text3);opacity:.8}
+.vid-ph-logo{font-size:48px;margin-bottom:12px;opacity:.15}
+.vid-ph-title{font-size:28px;font-weight:900;color:var(--accent);opacity:.4;letter-spacing:-1px}
+.vid-ph-sub{font-size:12px;color:var(--text3);margin-top:6px;opacity:.6}
 .vid-error{
-  position:absolute;inset:0;
-  display:none;flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(8,11,16,.92);
-  gap:10px;
+  position:absolute;inset:0;display:none;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:rgba(10,10,10,.95);gap:8px;pointer-events:auto;
 }
 .vid-error.show{display:flex}
-.vid-error-icon{font-size:36px}
-.vid-error-msg{font-size:13px;color:var(--text2);text-align:center;max-width:300px;line-height:1.6}
-.vid-error-retry{
-  margin-top:6px;padding:7px 18px;border-radius:7px;
-  background:var(--bg3);border:1px solid var(--border2);
-  color:var(--accent);font-size:13px;cursor:pointer;
-  font-family:var(--font-body);
+.vid-error-icon{font-size:32px;margin-bottom:4px}
+.vid-error-msg{font-size:14px;font-weight:600;color:var(--text);text-align:center;max-width:320px;line-height:1.5}
+.vid-error-tip{font-size:11px;color:var(--text3);text-align:center;max-width:320px;line-height:1.6;margin-top:2px}
+.error-btns{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap;justify-content:center}
+.err-btn{
+  padding:8px 18px;border-radius:4px;font-size:12px;font-weight:600;
+  cursor:pointer;font-family:var(--font);border:none;transition:all .15s;
 }
-.vid-error-retry:hover{background:var(--bg4)}
+.err-btn.primary{background:var(--accent);color:white}
+.err-btn.primary:hover{background:var(--accent2)}
+.err-btn.sec{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
+.err-btn.sec:hover{background:var(--bg4);color:var(--text)}
+.err-btn.vlc{background:rgba(245,166,35,.15);color:var(--gold);border:1px solid rgba(245,166,35,.3);display:none}
+.err-btn.vlc:hover{background:rgba(245,166,35,.25)}
 
 /* ── PLAYER BAR ── */
 .player-bar{
-  padding:0 16px;height:52px;
-  background:var(--bg2);border-top:1px solid var(--border);
-  display:flex;align-items:center;gap:12px;flex-shrink:0;
+  height:54px;padding:0 18px;flex-shrink:0;
+  background:rgba(0,0,0,.9);border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:14px;
 }
 .np-info{flex:1;min-width:0}
-.np-title{font-family:var(--font-head);font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.np-sub{font-size:10px;color:var(--text3);margin-top:1px}
-.pb-sep{width:1px;height:20px;background:var(--border2)}
+.np-title{font-size:13px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.np-sub{font-size:10px;color:var(--text3);margin-top:1px;font-family:var(--font-mono)}
+.pb-sep{width:1px;height:18px;background:var(--border)}
 .pb-btn{
   display:flex;align-items:center;gap:6px;
-  padding:5px 11px;border-radius:6px;
-  border:1px solid var(--border);background:var(--bg3);
-  color:var(--text2);font-size:12px;cursor:pointer;
-  font-family:var(--font-body);transition:all .15s;white-space:nowrap;
+  padding:6px 12px;border-radius:4px;
+  background:transparent;border:1px solid var(--border);
+  color:var(--text2);font-size:11px;font-weight:500;cursor:pointer;
+  font-family:var(--font);transition:all .15s;white-space:nowrap;
 }
-.pb-btn:hover{background:var(--bg4);color:var(--text);border-color:var(--border2)}
-.pb-btn svg{width:13px;height:13px}
-.vol-row{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text3)}
+.pb-btn:hover{background:var(--bg3);color:var(--text);border-color:rgba(255,255,255,.15)}
+.pb-btn svg{width:12px;height:12px}
+.vol-row{display:flex;align-items:center;gap:6px;color:var(--text3)}
 .vol-row input[type=range]{
-  -webkit-appearance:none;width:70px;height:3px;
+  -webkit-appearance:none;width:72px;height:3px;
   background:var(--bg4);border-radius:2px;outline:none;cursor:pointer;
 }
 .vol-row input[type=range]::-webkit-slider-thumb{
-  -webkit-appearance:none;width:12px;height:12px;
-  border-radius:50%;background:var(--accent);cursor:pointer;
+  -webkit-appearance:none;width:13px;height:13px;
+  border-radius:50%;background:var(--text);cursor:pointer;
 }
 
-/* ── VOD PAGES ── */
+/* ── VOD LAYOUT ── */
 .vod-layout{flex:1;display:flex;overflow:hidden}
-.vod-content{flex:1;overflow-y:auto;padding:16px}
-.vod-topbar{display:flex;align-items:center;gap:10px;margin-bottom:14px}
-.vod-search{
-  background:var(--bg2);border:1px solid var(--border);
-  border-radius:8px;padding:8px 12px;color:var(--text);
-  font-size:12px;outline:none;width:260px;font-family:var(--font-body);
+.vod-content{flex:1;overflow-y:auto;background:var(--bg)}
+.vod-header{
+  padding:20px 20px 14px;
+  background:linear-gradient(180deg,var(--bg2) 0%,var(--bg) 100%);
+  display:flex;align-items:center;gap:12px;flex-shrink:0;
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:10;
 }
-.vod-search:focus{border-color:var(--border2)}
+.vod-search{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:6px;padding:8px 14px 8px 36px;color:var(--text);
+  font-size:12px;outline:none;width:260px;font-family:var(--font);
+  transition:border .15s;position:relative;
+}
+.vod-search:focus{border-color:rgba(229,9,20,.4)}
 .vod-search::placeholder{color:var(--text3)}
-.vod-count{font-size:11px;color:var(--text3);margin-left:auto}
+.search-icon-wrap{position:relative;flex-shrink:0}
+.search-icon-wrap input{padding-left:34px}
+.search-icon-abs{
+  position:absolute;left:11px;top:50%;transform:translateY(-50%);
+  color:var(--text3);pointer-events:none;
+}
+.vod-count{
+  margin-left:auto;font-size:11px;color:var(--text3);
+  font-family:var(--font-mono);
+}
+.sort-select{
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);font-size:11px;padding:6px 10px;
+  border-radius:5px;outline:none;font-family:var(--font);cursor:pointer;
+}
+.sort-select:focus{border-color:rgba(229,9,20,.4)}
 
-.vod-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+/* ── VOD GRID ── */
+.vod-grid-wrap{padding:16px 20px 20px}
+.vod-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
+  gap:12px;
+}
 .vod-card{
-  background:var(--bg2);border-radius:8px;overflow:hidden;
-  cursor:pointer;border:1px solid var(--border);
+  background:var(--bg2);border-radius:6px;overflow:hidden;
+  cursor:pointer;border:1px solid transparent;
   transition:all .2s;position:relative;
 }
-.vod-card:hover{border-color:rgba(0,229,255,.25);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.vod-card:hover{
+  border-color:rgba(229,9,20,.5);
+  transform:scale(1.04);
+  box-shadow:0 10px 30px rgba(0,0,0,.6),0 0 0 1px rgba(229,9,20,.3);
+  z-index:2;
+}
 .vod-card:hover .vod-overlay{opacity:1}
-.vod-thumb{width:100%;aspect-ratio:2/3;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:32px;color:var(--text3);overflow:hidden;position:relative}
-.vod-thumb img{width:100%;height:100%;object-fit:cover}
-.vod-overlay{position:absolute;inset:0;background:rgba(0,229,255,.1);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s}
-.vod-play{width:36px;height:36px;border-radius:50%;background:rgba(0,229,255,.9);display:flex;align-items:center;justify-content:center}
-.vod-play svg{width:16px;height:16px;color:#000;margin-left:2px}
-.vod-body{padding:7px}
-.vod-name{font-size:11px;font-weight:500;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text)}
-.vod-cat{font-size:10px;color:var(--text3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vod-thumb{
+  width:100%;aspect-ratio:2/3;
+  background:var(--bg3);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+}
+.vod-thumb img{width:100%;height:100%;object-fit:cover;display:block}
+.vod-no-img{
+  position:absolute;inset:0;display:flex;align-items:center;
+  justify-content:center;background:var(--bg3);
+}
+.vod-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top, rgba(0,0,0,.9) 0%, rgba(0,0,0,.2) 60%, transparent 100%);
+  display:flex;align-items:flex-end;justify-content:center;
+  opacity:0;transition:opacity .2s;padding-bottom:12px;
+}
+.vod-play-btn{
+  width:40px;height:40px;border-radius:50%;
+  background:rgba(255,255,255,.95);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 2px 10px rgba(0,0,0,.5);
+}
+.vod-play-btn svg{width:16px;height:16px;color:#000;margin-left:2px}
+.vod-badge{
+  position:absolute;top:6px;left:6px;
+  background:rgba(0,0,0,.7);backdrop-filter:blur(4px);
+  color:var(--text2);font-size:9px;font-weight:600;
+  padding:2px 6px;border-radius:3px;letter-spacing:.3px;
+  white-space:nowrap;overflow:hidden;max-width:80%;text-overflow:ellipsis;
+}
+.vod-body{padding:8px 8px 10px}
+.vod-name{
+  font-size:11px;font-weight:600;line-height:1.35;color:var(--text);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}
+.load-more-wrap{padding:20px;text-align:center;grid-column:1/-1}
+.load-more-btn{
+  padding:10px 32px;border-radius:4px;
+  background:var(--bg3);border:1px solid var(--border);
+  color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;
+  font-family:var(--font);transition:all .15s;
+}
+.load-more-btn:hover{background:var(--bg4);color:var(--text);border-color:rgba(255,255,255,.2)}
 
 /* ── ADD PLAYLIST ── */
-.add-page{flex:1;overflow-y:auto;padding:28px}
-.add-card{max-width:520px;background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:24px;margin-bottom:16px}
-.add-card h2{font-family:var(--font-head);font-size:20px;font-weight:800;margin-bottom:4px}
+.add-page{flex:1;overflow-y:auto;padding:28px 24px}
+.add-card{
+  max-width:520px;background:var(--bg2);border-radius:8px;
+  border:1px solid var(--border);padding:24px;margin-bottom:16px;
+}
+.add-card h2{font-size:20px;font-weight:800;margin-bottom:4px}
 .add-card>p{color:var(--text2);font-size:13px;line-height:1.65;margin-bottom:20px}
-.segment{display:flex;background:var(--bg3);border-radius:8px;padding:3px;gap:2px;margin-bottom:18px}
-.seg-btn{flex:1;padding:7px 10px;border-radius:6px;border:none;background:transparent;color:var(--text2);font-size:12px;cursor:pointer;font-family:var(--font-body);transition:all .15s}
-.seg-btn.active{background:var(--bg2);color:var(--text);font-weight:500;box-shadow:0 1px 3px rgba(0,0,0,.3)}
+.segment{
+  display:flex;background:var(--bg3);border-radius:6px;
+  padding:3px;gap:2px;margin-bottom:18px;
+}
+.seg-btn{
+  flex:1;padding:7px 10px;border-radius:4px;border:none;
+  background:transparent;color:var(--text2);font-size:12px;
+  cursor:pointer;font-family:var(--font);transition:all .15s;
+}
+.seg-btn.active{background:var(--bg2);color:var(--text);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.4)}
 .fgroup{margin-bottom:13px}
-.fgroup label{display:block;font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px}
+.fgroup label{
+  display:block;font-size:10px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;
+}
 .finput{
   width:100%;background:var(--bg3);border:1px solid var(--border);
-  border-radius:7px;padding:9px 12px;color:var(--text);
-  font-size:13px;outline:none;font-family:var(--font-body);transition:border .15s;
+  border-radius:6px;padding:9px 12px;color:var(--text);
+  font-size:13px;outline:none;font-family:var(--font);transition:border .15s;
 }
-.finput:focus{border-color:var(--border2);box-shadow:0 0 0 3px rgba(0,229,255,.05)}
+.finput:focus{border-color:rgba(229,9,20,.5)}
 .finput::placeholder{color:var(--text3)}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .submit-btn{
-  width:100%;padding:10px;border-radius:8px;
-  background:var(--accent);border:none;color:#000;
-  font-family:var(--font-head);font-size:14px;font-weight:700;
+  width:100%;padding:11px;border-radius:6px;
+  background:var(--accent);border:none;color:white;
+  font-family:var(--font);font-size:14px;font-weight:700;
   cursor:pointer;transition:all .15s;margin-top:4px;
   display:flex;align-items:center;justify-content:center;gap:8px;
 }
-.submit-btn:hover{background:#33eaff;box-shadow:0 0 20px rgba(0,229,255,.3)}
+.submit-btn:hover{background:var(--accent2);box-shadow:0 4px 16px rgba(229,9,20,.4)}
 .submit-btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
 .prog-wrap{display:none;margin:12px 0}
-.prog-track{height:3px;background:var(--bg3);border-radius:2px;overflow:hidden;margin-bottom:5px}
-.prog-fill{height:100%;background:var(--accent);width:0;transition:width .3s;border-radius:2px}
-.prog-label{font-size:11px;color:var(--text2)}
-.msg-box{padding:10px 13px;border-radius:7px;font-size:12px;margin-bottom:12px;line-height:1.55}
-.msg-box.ok{background:rgba(0,230,118,.08);color:#4dffa0;border:1px solid rgba(0,230,118,.15)}
-.msg-box.err{background:rgba(255,61,87,.08);color:#ff8096;border:1px solid rgba(255,61,87,.15)}
-.msg-box.info{background:rgba(0,229,255,.06);color:var(--accent);border:1px solid var(--border2)}
+.prog-track{height:2px;background:var(--bg3);border-radius:1px;overflow:hidden;margin-bottom:6px}
+.prog-fill{height:100%;background:var(--accent);width:0;transition:width .3s}
+.prog-label{font-size:11px;color:var(--text2);font-family:var(--font-mono)}
+.msg-box{padding:10px 14px;border-radius:6px;font-size:12px;margin-bottom:12px;line-height:1.55}
+.msg-box.ok{background:rgba(70,211,105,.08);color:#46d369;border:1px solid rgba(70,211,105,.2)}
+.msg-box.err{background:rgba(229,9,20,.08);color:#ff6b6b;border:1px solid rgba(229,9,20,.2)}
+.msg-box.info{background:rgba(0,113,235,.08);color:#5ba3ff;border:1px solid rgba(0,113,235,.2)}
 .info-box{
-  background:var(--bg3);border-radius:8px;padding:12px 13px;
+  background:var(--bg3);border-radius:6px;padding:12px 14px;
   font-size:11px;color:var(--text2);line-height:1.7;margin-bottom:14px;
-  border-left:2px solid var(--accent2);
+  border-left:2px solid rgba(229,9,20,.5);
 }
 .info-box strong{color:var(--text)}
-.info-box code{background:var(--bg);padding:1px 4px;border-radius:3px;font-size:10px;color:var(--accent)}
+.info-box code{background:var(--bg);padding:1px 5px;border-radius:3px;font-size:11px;color:#5ba3ff;font-family:var(--font-mono)}
 .saved-card{max-width:520px}
 .saved-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
 .saved-item{
   display:flex;align-items:center;gap:10px;
-  padding:10px 14px;background:var(--bg2);
-  border-radius:8px;margin-bottom:6px;border:1px solid var(--border);
+  padding:12px 14px;background:var(--bg2);
+  border-radius:6px;margin-bottom:6px;border:1px solid var(--border);
+  transition:border .15s;
 }
-.saved-ico{width:32px;height:32px;background:var(--bg3);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.saved-item:hover{border-color:rgba(255,255,255,.15)}
+.saved-ico{
+  width:34px;height:34px;background:var(--bg3);border-radius:5px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;
+}
 .saved-info{flex:1;min-width:0}
-.saved-name{font-size:13px;font-weight:500}
-.saved-url{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px}
+.saved-name{font-size:13px;font-weight:600}
+.saved-url{font-size:10px;color:var(--text3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:2px;font-family:var(--font-mono)}
 .saved-stats{font-size:10px;color:var(--green);margin-top:2px}
-.btn-load{background:rgba(0,229,255,.1);border:1px solid var(--border2);color:var(--accent);padding:4px 10px;border-radius:5px;cursor:pointer;font-size:11px;font-family:var(--font-body);white-space:nowrap}
-.btn-load:hover{background:rgba(0,229,255,.18)}
-.btn-del{background:transparent;border:1px solid var(--border);color:var(--text3);padding:4px 8px;border-radius:5px;cursor:pointer;font-size:11px}
-.btn-del:hover{border-color:var(--red);color:var(--red)}
+.btn-load{
+  background:var(--accent);border:none;color:white;
+  padding:5px 12px;border-radius:4px;cursor:pointer;
+  font-size:11px;font-family:var(--font);font-weight:600;white-space:nowrap;
+}
+.btn-load:hover{background:var(--accent2)}
+.btn-del{
+  background:transparent;border:1px solid var(--border);color:var(--text3);
+  padding:5px 8px;border-radius:4px;cursor:pointer;font-size:11px;
+}
+.btn-del:hover{border-color:var(--accent);color:var(--accent)}
 
 /* ── SETTINGS ── */
-.cfg-page{flex:1;overflow-y:auto;padding:28px}
-.cfg-card{max-width:500px;background:var(--bg2);border-radius:12px;border:1px solid var(--border);padding:24px;margin-bottom:14px}
-.cfg-card h3{font-family:var(--font-head);font-size:13px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px}
-.cfg-row{display:flex;align-items:center;padding:11px 0;border-bottom:1px solid var(--border)}
+.cfg-page{flex:1;overflow-y:auto;padding:28px 24px}
+.cfg-card{
+  max-width:500px;background:var(--bg2);border-radius:8px;
+  border:1px solid var(--border);padding:24px;margin-bottom:14px;
+}
+.cfg-card h3{
+  font-size:11px;font-weight:700;color:var(--text3);
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:14px;
+}
+.cfg-row{display:flex;align-items:center;padding:12px 0;border-bottom:1px solid var(--border)}
 .cfg-row:last-child{border-bottom:none;padding-bottom:0}
 .cfg-row-info{flex:1}
 .cfg-row-label{font-size:13px;font-weight:500}
 .cfg-row-sub{font-size:11px;color:var(--text3);margin-top:2px}
-.toggle{width:36px;height:20px;background:var(--bg4);border-radius:10px;border:1px solid var(--border);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
-.toggle.on{background:var(--accent2);border-color:var(--accent2)}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:var(--text3);transition:all .2s}
-.toggle.on::after{left:18px;background:var(--accent)}
+.toggle{width:38px;height:22px;background:var(--bg4);border-radius:11px;border:1px solid var(--border);cursor:pointer;position:relative;transition:background .2s;flex-shrink:0}
+.toggle.on{background:var(--accent);border-color:var(--accent)}
+.toggle::after{content:'';position:absolute;top:3px;left:3px;width:14px;height:14px;border-radius:50%;background:var(--text3);transition:all .2s}
+.toggle.on::after{left:19px;background:white}
 
 /* ── EMPTY ── */
 .empty{text-align:center;padding:48px 20px;color:var(--text3)}
-.empty-ico{font-size:40px;opacity:.25;margin-bottom:12px}
-.empty p{font-size:12px;line-height:1.7;opacity:.8}
-
-.cat-edit-btn{
-  font-size:13px;color:var(--text3);padding:0 2px;border-radius:3px;
-  cursor:pointer;line-height:1;opacity:0;transition:opacity .15s;
-}
-.cat-item:hover .cat-edit-btn{opacity:1}
+.empty-ico{font-size:40px;opacity:.2;margin-bottom:14px}
+.empty p{font-size:12px;line-height:1.7;opacity:.7}
 
 /* ── CAT MANAGER MODAL ── */
 .modal-bg{
-  display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);
+  display:none;position:fixed;inset:0;background:rgba(0,0,0,.8);
   z-index:500;align-items:center;justify-content:center;
-  backdrop-filter:blur(4px);
+  pointer-events:none;
 }
-.modal-bg.show{display:flex}
+.modal-bg.show{display:flex;pointer-events:auto}
 .modal{
-  background:var(--bg2);border:1px solid var(--border2);border-radius:14px;
+  background:var(--bg2);border:1px solid rgba(255,255,255,.1);border-radius:10px;
   width:480px;max-height:80vh;display:flex;flex-direction:column;
-  box-shadow:0 20px 60px rgba(0,0,0,.6);
+  box-shadow:0 24px 80px rgba(0,0,0,.8);
 }
-.modal-head{
-  padding:16px 20px;border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:10px;flex-shrink:0;
-}
-.modal-head h3{font-family:var(--font-head);font-size:15px;font-weight:700;flex:1}
-.modal-close{background:var(--bg3);border:none;color:var(--text2);width:28px;height:28px;border-radius:6px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.modal-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0}
+.modal-head h3{font-size:15px;font-weight:700;flex:1}
+.modal-close{background:var(--bg3);border:none;color:var(--text2);width:28px;height:28px;border-radius:5px;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center}
+.modal-close:hover{background:var(--bg4);color:var(--text)}
 .modal-body{flex:1;overflow-y:auto;padding:12px}
 .modal-body::-webkit-scrollbar{width:3px}
-.modal-body::-webkit-scrollbar-thumb{background:var(--border2);border-radius:2px}
+.modal-body::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:2px}
 .modal-tip{font-size:11px;color:var(--text3);padding:0 4px 10px;line-height:1.6}
-
-.cat-row{
-  display:flex;align-items:center;gap:8px;
-  padding:7px 8px;border-radius:7px;border:1px solid var(--border);
-  margin-bottom:5px;background:var(--bg3);cursor:default;
-  transition:background .1s;
-}
+.cat-row{display:flex;align-items:center;gap:8px;padding:7px 8px;border-radius:5px;border:1px solid var(--border);margin-bottom:4px;background:var(--bg3);cursor:default;transition:background .1s}
 .cat-row:hover{background:var(--bg4)}
-.cat-row.hidden-row{opacity:.45}
+.cat-row.hidden-row{opacity:.4}
 .drag-handle{color:var(--text3);cursor:grab;font-size:14px;flex-shrink:0;user-select:none}
 .drag-handle:active{cursor:grabbing}
-.cat-row-ico{font-size:14px;flex-shrink:0}
-.cat-row-name{flex:1;min-width:0}
-.cat-row-orig{font-size:12px;font-weight:500;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cat-row-ico{font-size:13px;flex-shrink:0}
+.cat-row-name{flex:1;min-width:0;cursor:pointer}
+.cat-row-orig{font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cat-row-label{font-size:10px;color:var(--accent);margin-top:1px}
-.cat-row-count{font-size:10px;color:var(--text3);flex-shrink:0}
-.icon-btn{background:transparent;border:1px solid var(--border);color:var(--text3);width:26px;height:26px;border-radius:5px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
+.cat-row-count{font-size:10px;color:var(--text3);flex-shrink:0;font-family:var(--font-mono)}
+.icon-btn{background:transparent;border:1px solid var(--border);color:var(--text3);width:26px;height:26px;border-radius:4px;cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .15s}
 .icon-btn:hover{background:var(--bg2);color:var(--text)}
-.icon-btn.active{background:rgba(255,61,87,.1);border-color:rgba(255,61,87,.3);color:var(--red)}
+.icon-btn.active{background:rgba(229,9,20,.1);border-color:rgba(229,9,20,.3);color:var(--accent)}
 .modal-foot{padding:12px 20px;border-top:1px solid var(--border);display:flex;gap:8px;flex-shrink:0}
-.modal-btn{flex:1;padding:9px;border-radius:7px;border:none;font-family:var(--font-body);font-size:13px;font-weight:500;cursor:pointer}
-.modal-btn.primary{background:var(--accent);color:#000}
-.modal-btn.primary:hover{background:#33eaff}
+.modal-btn{flex:1;padding:9px;border-radius:5px;border:none;font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer}
+.modal-btn.primary{background:var(--accent);color:white}
+.modal-btn.primary:hover{background:var(--accent2)}
 .modal-btn.sec{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
-.modal-btn.sec:hover{background:var(--bg4)}
+.modal-btn.sec:hover{background:var(--bg4);color:var(--text)}
 
-/* ── QUICK RENAME POPUP ── */
+/* ── RENAME POPUP ── */
 .rename-popup{
-  position:fixed;background:var(--bg2);border:1px solid var(--border2);
-  border-radius:9px;padding:12px;z-index:600;box-shadow:0 8px 30px rgba(0,0,0,.5);
-  width:220px;display:none;
+  position:fixed;background:var(--bg2);border:1px solid rgba(255,255,255,.15);
+  border-radius:8px;padding:12px;z-index:600;
+  box-shadow:0 8px 32px rgba(0,0,0,.6);width:220px;display:none;pointer-events:none;
 }
-.rename-popup.show{display:block}
+.rename-popup.show{display:block;pointer-events:auto}
 .rename-popup input{
-  width:100%;background:var(--bg3);border:1px solid var(--border2);
-  border-radius:6px;padding:7px 10px;color:var(--text);font-size:13px;
-  outline:none;font-family:var(--font-body);margin-bottom:8px;
+  width:100%;background:var(--bg3);border:1px solid var(--border);
+  border-radius:5px;padding:7px 10px;color:var(--text);font-size:13px;
+  outline:none;font-family:var(--font);margin-bottom:8px;
 }
-.rename-popup input:focus{border-color:var(--accent)}
+.rename-popup input:focus{border-color:rgba(229,9,20,.4)}
 .rename-popup-row{display:flex;gap:6px}
-.rp-btn{flex:1;padding:6px;border-radius:5px;border:none;font-size:12px;cursor:pointer;font-family:var(--font-body)}
-.rp-ok{background:var(--accent);color:#000;font-weight:600}
+.rp-btn{flex:1;padding:6px;border-radius:4px;border:none;font-size:12px;cursor:pointer;font-family:var(--font);font-weight:600}
+.rp-ok{background:var(--accent);color:white}
 .rp-cancel{background:var(--bg3);color:var(--text2);border:1px solid var(--border)}
 
-/* ── NOTIF ── */
+/* ── TOAST ── */
 .toast{
   position:fixed;bottom:20px;right:20px;
-  background:var(--bg3);border:1px solid var(--border2);
-  border-radius:8px;padding:10px 15px;font-size:12px;
-  z-index:9999;transform:translateY(8px);opacity:0;
+  background:var(--bg3);border:1px solid rgba(255,255,255,.1);
+  border-radius:6px;padding:10px 16px;font-size:12px;font-weight:500;
+  z-index:9999;transform:translateY(10px);opacity:0;
   transition:all .22s;pointer-events:none;max-width:280px;
-  box-shadow:0 4px 20px rgba(0,0,0,.4);
+  box-shadow:0 4px 24px rgba(0,0,0,.5);
 }
 .toast.show{transform:translateY(0);opacity:1}
 
-/* ── DRAG ── */
+/* ── DRAG OVERLAY ── */
 .drag-ov{
   display:none;position:fixed;inset:0;
-  background:rgba(0,229,255,.06);
-  border:2px dashed var(--accent2);z-index:200;
+  background:rgba(229,9,20,.08);
+  border:2px dashed rgba(229,9,20,.5);z-index:200;
   align-items:center;justify-content:center;
-  font-family:var(--font-head);font-size:20px;font-weight:700;color:var(--accent);
-  pointer-events:none;backdrop-filter:blur(2px);
+  font-size:18px;font-weight:700;color:var(--accent);
+  pointer-events:none;
 }
 .drag-ov.show{display:flex}
+
+@keyframes spin{to{transform:rotate(360deg)}}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="logo">
-    <div class="logo-mark">
-      <svg viewBox="0 0 16 16" fill="none"><polygon points="3,2 14,8 3,14" fill="#000"/></svg>
+    <div class="logo-icon">
+      <svg viewBox="0 0 18 18" fill="none"><polygon points="4,2 16,9 4,16" fill="white"/></svg>
     </div>
-    Stream<span>Box</span>
+    SBOX
   </div>
-
   <nav class="nav">
     <button class="nav-btn active" data-page="live" onclick="switchPage('live',this)">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3" fill="currentColor" stroke="none"/></svg>
       Ao Vivo
     </button>
     <button class="nav-btn" data-page="movies" onclick="switchPage('movies',this)">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="17" y1="7" x2="22" y2="7"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="2" y1="17" x2="7" y2="17"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
       Filmes
     </button>
     <button class="nav-btn" data-page="series" onclick="switchPage('series',this)">
@@ -442,19 +581,20 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
       Config
     </button>
   </nav>
-
   <div class="topbar-right">
     <div class="status-pill">
       <div class="dot" id="sdot"></div>
-      <span id="stxt">Sem playlist</span><span id="proxy-badge" style="display:none;margin-left:6px;background:rgba(0,229,255,.15);color:var(--accent);font-size:10px;padding:2px 7px;border-radius:10px;border:1px solid var(--border2)">PROXY ATIVO</span>
+      <span id="stxt">Sem playlist</span>
     </div>
+    <span class="proxy-badge" id="proxy-badge">PROXY</span>
+    <button class="reload-btn" id="reload-btn" onclick="reloadLastPlaylist()">↺ Atualizar</button>
   </div>
 </div>
 
-<!-- ══ LIVE ══ -->
+<!-- AO VIVO -->
 <div class="main page active" id="page-live">
   <div class="sidebar">
-    <div class="sidebar-head">
+    <div class="sb-head">
       <div class="sb-search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" placeholder="Buscar categorias..." oninput="filterCats('cat-list',this.value)">
@@ -477,15 +617,18 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
     <div class="vid-wrap">
       <video id="vid" controls></video>
       <div class="vid-placeholder" id="vph">
-        <div class="vid-ph-icon">📺</div>
-        <div class="vid-ph-title">StreamBox</div>
+        <div class="vid-ph-logo">▶</div>
+        <div class="vid-ph-title">STREAMBOX</div>
         <div class="vid-ph-sub">Selecione um canal para começar</div>
       </div>
       <div class="vid-error" id="verr">
         <div class="vid-error-icon">⚠️</div>
-        <div class="vid-error-msg" id="verr-msg">Não foi possível reproduzir este stream.</div>
-        <div style="font-size:11px;color:var(--text3);margin-top:4px;max-width:300px;text-align:center;line-height:1.6" id="verr-tip"></div>
-        <button class="vid-error-retry" onclick="retryStream()">↺ Tentar novamente</button>
+        <div class="vid-error-msg" id="verr-msg">Não foi possível reproduzir.</div>
+        <div class="vid-error-tip" id="verr-tip"></div>
+        <div class="error-btns">
+          <button class="err-btn primary" onclick="retryStream()">↺ Tentar novamente</button>
+          <button class="err-btn vlc" id="vlc-btn" onclick="openInVLC()">🎬 Abrir no VLC</button>
+        </div>
       </div>
     </div>
     <div class="player-bar">
@@ -495,26 +638,26 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
       </div>
       <div class="pb-sep"></div>
       <div class="vol-row">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px;flex-shrink:0"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
         <input type="range" min="0" max="1" step="0.02" value="0.8" oninput="setVol(this.value)">
       </div>
       <div class="pb-sep"></div>
       <button class="pb-btn" onclick="toggleMute()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
         Mudo
       </button>
       <button class="pb-btn" onclick="goFS()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:12px;height:12px"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
         Tela cheia
       </button>
     </div>
   </div>
 </div>
 
-<!-- ══ MOVIES ══ -->
+<!-- FILMES -->
 <div class="main page" id="page-movies">
   <div class="sidebar">
-    <div class="sidebar-head">
+    <div class="sb-head">
       <div class="sb-search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" placeholder="Categorias..." oninput="filterCats('mcat-list',this.value)">
@@ -525,20 +668,30 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
     </div>
   </div>
   <div class="vod-content">
-    <div class="vod-topbar">
-      <input type="text" class="vod-search" placeholder="🔍  Buscar filmes..." oninput="searchVOD('movies',this.value)">
+    <div class="vod-header">
+      <div class="search-icon-wrap" style="position:relative">
+        <svg class="search-icon-abs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="vod-search" placeholder="Buscar filmes..." oninput="searchVOD('movies',this.value)" style="padding-left:34px">
+      </div>
+      <select class="sort-select" onchange="sortAndRender('movies',this.value)" id="sort-movies">
+        <option value="az">A → Z</option>
+        <option value="za">Z → A</option>
+        <option value="newest">Mais Recentes</option>
+      </select>
       <div class="vod-count" id="mv-count"></div>
     </div>
-    <div class="vod-grid" id="movie-grid">
-      <div class="empty" style="grid-column:1/-1"><p>Carregue uma playlist</p></div>
+    <div class="vod-grid-wrap">
+      <div class="vod-grid" id="movie-grid">
+        <div class="empty" style="grid-column:1/-1"><p>Carregue uma playlist</p></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══ SERIES ══ -->
+<!-- SÉRIES -->
 <div class="main page" id="page-series">
   <div class="sidebar">
-    <div class="sidebar-head">
+    <div class="sb-head">
       <div class="sb-search">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         <input type="text" placeholder="Categorias..." oninput="filterCats('scat-list',this.value)">
@@ -549,50 +702,54 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
     </div>
   </div>
   <div class="vod-content">
-    <div class="vod-topbar">
-      <input type="text" class="vod-search" placeholder="🔍  Buscar séries..." oninput="searchVOD('series',this.value)">
+    <div class="vod-header">
+      <div class="search-icon-wrap" style="position:relative">
+        <svg class="search-icon-abs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" class="vod-search" placeholder="Buscar séries..." oninput="searchVOD('series',this.value)" style="padding-left:34px">
+      </div>
+      <select class="sort-select" onchange="sortAndRender('series',this.value)" id="sort-series">
+        <option value="newest" selected>Mais Recentes</option>
+        <option value="az">A → Z</option>
+        <option value="za">Z → A</option>
+      </select>
       <div class="vod-count" id="sr-count"></div>
     </div>
-    <div class="vod-grid" id="series-grid">
-      <div class="empty" style="grid-column:1/-1"><p>Carregue uma playlist</p></div>
+    <div class="vod-grid-wrap">
+      <div class="vod-grid" id="series-grid">
+        <div class="empty" style="grid-column:1/-1"><p>Carregue uma playlist</p></div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ══ ADD PLAYLIST ══ -->
+<!-- PLAYLIST -->
 <div class="main page" id="page-add" style="overflow-y:auto">
   <div class="add-page">
-
     <div class="add-card">
       <h2>Gerenciar Playlists</h2>
       <p>Adicione pelo link M3U, credenciais Xtream Codes, ou importe um arquivo .m3u do computador.</p>
-
       <div class="info-box">
-        <strong>⚡ Streams ao vivo (HLS/TS)</strong> agora funcionam via hls.js integrado.<br>
-        <strong>⚠️ CORS com URL:</strong> Se a URL falhar, salve o arquivo .m3u no navegador e importe pela aba Arquivo. Cole a URL → Enter → botão direito → "Salvar como".
+        <strong>⚡ Streams ao vivo (HLS/TS)</strong> funcionam via proxy local.<br>
+        <strong>⚠️ CORS:</strong> Se a URL falhar, salve o .m3u no navegador e importe pela aba <code>Arquivo</code>.
       </div>
-
       <div id="amsg"></div>
       <div class="prog-wrap" id="prog-wrap">
         <div class="prog-track"><div class="prog-fill" id="prog-fill"></div></div>
         <div class="prog-label" id="prog-label">Carregando...</div>
       </div>
-
       <div class="segment">
         <button class="seg-btn active" onclick="switchTab('m3u',this)">🔗 URL M3U</button>
         <button class="seg-btn" onclick="switchTab('xtream',this)">🔑 Xtream Codes</button>
         <button class="seg-btn" onclick="switchTab('file',this)">📁 Arquivo</button>
       </div>
-
       <div id="tab-m3u">
         <div class="fgroup"><label>Nome</label><input class="finput" id="m3u-name" type="text" placeholder="Minha IPTV"></div>
-        <div class="fgroup"><label>URL da playlist M3U / M3U8</label><input class="finput" id="m3u-url" type="url" placeholder="http://servidor.com:8080/get.php?username=...&password=...&type=m3u_plus"></div>
+        <div class="fgroup"><label>URL M3U</label><input class="finput" id="m3u-url" type="url" placeholder="http://servidor.com:8080/get.php?username=...&password=...&type=m3u_plus"></div>
         <button class="submit-btn" id="btn-m3u" onclick="doURL()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:14px;height:14px"><polyline points="8 17 12 21 16 17"/><line x1="12" y1="12" x2="12" y2="21"/><path d="M20.88 18.09A5 5 0 0 0 18 9h-1.26A8 8 0 1 0 3 16.29"/></svg>
           Carregar Playlist
         </button>
       </div>
-
       <div id="tab-xtream" style="display:none">
         <div class="fgroup"><label>Nome</label><input class="finput" id="xc-name" placeholder="Minha IPTV Xtream"></div>
         <div class="fgroup"><label>Servidor</label><input class="finput" id="xc-srv" type="url" placeholder="http://servidor.com:8080"></div>
@@ -602,24 +759,21 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
         </div>
         <button class="submit-btn" id="btn-xc" onclick="doXtream()">🔑 Conectar</button>
       </div>
-
       <div id="tab-file" style="display:none">
         <div class="fgroup"><label>Nome</label><input class="finput" id="file-name" placeholder="Minha Playlist Local"></div>
-        <div class="fgroup"><label>Arquivo .m3u ou .m3u8</label><input class="finput" id="file-in" type="file" accept=".m3u,.m3u8,.txt" style="padding:8px"></div>
-        <p style="font-size:11px;color:var(--text3);margin:-4px 0 10px">💡 Pode arrastar o arquivo .m3u direto na janela.</p>
+        <div class="fgroup"><label>Arquivo .m3u</label><input class="finput" id="file-in" type="file" accept=".m3u,.m3u8,.txt" style="padding:8px"></div>
+        <p style="font-size:11px;color:var(--text3);margin:-4px 0 10px">💡 Arraste o arquivo .m3u diretamente na janela.</p>
         <button class="submit-btn" id="btn-file" onclick="doFile()">📂 Importar</button>
       </div>
     </div>
-
     <div class="saved-card" id="saved-wrap" style="display:none">
       <div class="saved-label">Playlists Salvas</div>
       <div id="saved-list"></div>
     </div>
-
   </div>
 </div>
 
-<!-- ══ SETTINGS ══ -->
+<!-- CONFIG -->
 <div class="main page" id="page-settings" style="overflow-y:auto">
   <div class="cfg-page">
     <div class="cfg-card">
@@ -637,9 +791,9 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
       <h3>Sobre</h3>
       <div class="cfg-row">
         <div class="cfg-row-info">
-          <div class="cfg-row-label">StreamBox v2.1</div>
-          <div class="cfg-row-sub">Player IPTV com suporte a HLS, MPEG-TS, M3U, Xtream Codes</div>
-          <div class="cfg-row-sub" style="margin-top:6px;color:var(--text3)">Atalhos: Espaço = pausa · ←→ = ±10s · F = tela cheia · M = mudo</div>
+          <div class="cfg-row-label">StreamBox v3.0</div>
+          <div class="cfg-row-sub">Player IPTV — HLS, MPEG-TS, M3U, Xtream Codes</div>
+          <div class="cfg-row-sub" style="margin-top:5px">Espaço = pausa · ←→ = ±10s · F = tela cheia · M = mudo</div>
         </div>
       </div>
     </div>
@@ -649,34 +803,33 @@ body{font-family:var(--font-body);background:var(--bg);color:var(--text);height:
 <div class="toast" id="toast"></div>
 <div class="drag-ov" id="drag-ov">Solte o arquivo .m3u aqui</div>
 
-<!-- CAT MANAGER MODAL -->
 <div class="modal-bg" id="cat-modal-bg" onclick="if(event.target===this)closeCatManager()">
   <div class="modal">
     <div class="modal-head">
-      <h3>✏️ Organizar Categorias</h3>
+      <h3>Organizar Categorias</h3>
       <button class="modal-close" onclick="closeCatManager()">✕</button>
     </div>
     <div class="modal-body">
-      <div class="modal-tip">Arraste para reordenar · Clique no nome para renomear · 👁 para ocultar/mostrar</div>
+      <div class="modal-tip">Arraste para reordenar · Clique no nome para renomear · 👁 para ocultar</div>
       <div id="cat-manager-list"></div>
     </div>
     <div class="modal-foot">
-      <button class="modal-btn sec" onclick="resetCatPrefs()">↺ Resetar tudo</button>
+      <button class="modal-btn sec" onclick="resetCatPrefs()">↺ Resetar</button>
       <button class="modal-btn primary" onclick="closeCatManager()">✓ Pronto</button>
     </div>
   </div>
 </div>
 
-<!-- QUICK RENAME POPUP -->
 <div class="rename-popup" id="rename-popup">
   <input type="text" id="rename-input" placeholder="Novo nome...">
   <div class="rename-popup-row">
-    <button class="rp-btn rp-ok" onclick="confirmRename()">✓ Ok</button>
-    <button class="rp-btn rp-cancel" onclick="closeRename()">Cancelar</button>
+    <button class="rp-btn rp-ok" onclick="confirmRename()">✓</button>
+    <button class="rp-btn rp-cancel" onclick="closeRename()">✕</button>
   </div>
 </div>
 
 <script>
+
 // ─── STATE ───────────────────────────────────────────────────────────────────
 const S = {
   playlists:[],
@@ -764,6 +917,8 @@ function detectStreamType(url) {
 function destroyPlayers() {
   if (S.hlsInst)  { try{ S.hlsInst.destroy(); }catch(e){} S.hlsInst = null; }
   if (S.tsInst)   { try{ S.tsInst.destroy(); }catch(e){} S.tsInst = null; }
+  const vid = document.getElementById('vid');
+  try { vid.pause(); vid.removeAttribute('src'); vid.load(); } catch(e) {}
 }
 
 function playStream(url, name, sub){
@@ -783,8 +938,6 @@ function playStream(url, name, sub){
 
   vid.style.display = 'block';
   vid.volume = parseFloat(document.querySelector('.vol-row input').value);
-  vid.removeAttribute('src');
-  vid.load();
 
   const type = detectStreamType(url);
   // Extrai URL real para análise (pode estar dentro de /proxy?url=...)
@@ -806,7 +959,6 @@ function playStream(url, name, sub){
   } else if (type === 'mpegts' && typeof mpegts !== 'undefined' && mpegts.isSupported()) {
     playMpegTS(vid, url, isLiveStream);
   } else if (type === 'native_first') {
-    // URL sem extensão: tenta nativo primeiro, se falhar → mpegts → hls
     tryNative(vid, url);
   } else {
     tryNative(vid, url);
@@ -859,81 +1011,88 @@ function playHLS(vid, url) {
 }
 
 function playMpegTS(vid, url, isLive) {
-  // Extrai URL real (pode estar codificada em /proxy?url=...)
   let rawUrl = url;
   try { const _u = new URL(url); rawUrl = _u.searchParams.get('url') || url; } catch(e){}
   const rawLower = rawUrl.toLowerCase().split('?')[0];
+  if(isLive === undefined){ isLive = !rawLower.match(/\.mp4|\.mkv|\.avi|\.mov/); }
+  const tsType = rawLower.endsWith('.mp4') ? 'mp4' : 'mpegts';
+  console.log(`mpegts.js type:${tsType} live:${isLive} → ${rawUrl.substring(0,70)}`);
 
-  if(isLive === undefined){
-    isLive = !rawLower.match(/\.mp4|\.mkv|\.avi|\.mov/);
+  // Se mpegts já falhou para esta URL, vai direto pro nativo
+  if(S._mpegtsTriedUrls && S._mpegtsTriedUrls.has(url)){
+    console.log('mpegts já tentou esta URL, indo para nativo...');
+    tryNative(vid, url);
+    return;
   }
 
-  // Tipo correto para mpegts.js
-  let tsType = 'mpegts';
-  if(rawLower.endsWith('.mp4')) tsType = 'mp4';
-
-  console.log(`mpegts.js — type:${tsType} isLive:${isLive} → ${rawUrl.substring(0,70)}`);
-
+  let player;
   try {
-    const player = mpegts.createPlayer({
-      type: tsType,
-      isLive: isLive,
-      url: url,
+    player = mpegts.createPlayer({
+      type: tsType, isLive, url,
     }, {
       enableWorker: true,
-      lazyLoadMaxDuration: isLive ? 3*60 : 10*60,
+      lazyLoadMaxDuration: isLive ? 180 : 600,
       liveBufferLatencyChasing: isLive,
       liveBufferLatencyMaxLatency: 8.0,
       liveBufferLatencyMinRemain: 2.0,
-      stashInitialSize: isLive ? 128 : 512,
+      stashInitialSize: isLive ? 128 : 384,
       autoCleanupSourceBuffer: true,
       deferLoadAfterSourceOpen: false,
     });
-    S.tsInst = player;
-    player.attachMediaElement(vid);
-    player.load();
-
-    // Watchdog: se depois de 8s o vídeo não avançou nada → tela cinza → tenta HLS
-    const watchdog = setTimeout(() => {
-      if(S.tsInst !== player) return; // já foi trocado
-      if(vid.readyState < 2 || vid.currentTime === 0){
-        console.warn('mpegts watchdog: stalled após 8s, tentando HLS...');
-        player.destroy(); S.tsInst = null;
-        if(Hls.isSupported()){
-          playHLS(vid, url);
-        } else {
-          showVidError('Não foi possível reproduzir. Tente outro episódio ou abra no VLC.');
-        }
-      }
-    }, 8000);
-
-    player.on(mpegts.Events.ERROR, (errType, errDetail, info) => {
-      clearTimeout(watchdog);
-      console.error('mpegts error:', errType, errDetail, info);
-      player.destroy(); S.tsInst = null;
-      if(errType === mpegts.ErrorTypes.NETWORK_ERROR){
-        const status = info && info.code ? ` (HTTP ${info.code})` : '';
-        showVidError(`Conteúdo indisponível${status}. Episódio offline ou fora do plano.`);
-      } else if(errType === mpegts.ErrorTypes.MEDIA_ERROR){
-        console.log('mpegts MEDIA_ERROR → tentando HLS...');
-        if(Hls.isSupported()){ playHLS(vid, url); }
-        else { showVidError('Codec não suportado (H.265/HEVC). Abra no VLC.'); }
-      } else {
-        showVidError('Erro ao carregar. Tente novamente.');
-      }
-    });
-
-    // Limpa watchdog quando começar a reproduzir
-    vid.addEventListener('playing', () => clearTimeout(watchdog), {once:true});
-    vid.addEventListener('timeupdate', () => clearTimeout(watchdog), {once:true});
-
-    if(S.cfg.autoplay) vid.play().catch(e => {
-      if(e.name !== 'NotAllowedError') console.warn('play():', e.message);
-    });
   } catch(e) {
-    console.error('mpegts.js exception:', e);
-    tryNative(vid, url);
+    console.error('mpegts.createPlayer falhou:', e);
+    tryNative(vid, url); return;
   }
+
+  S.tsInst = player;
+  // Track tried URLs to avoid infinite loops
+  if(!S._mpegtsTriedUrls) S._mpegtsTriedUrls = new Set();
+  S._mpegtsTriedUrls.add(url);
+
+  player.attachMediaElement(vid);
+  player.load();
+
+  // Watchdog: 10s sem reproduzir → erro claro (não tenta HLS silenciosamente)
+  const watchdog = setTimeout(() => {
+    if(S.tsInst !== player) return;
+    if(vid.readyState < 2 || (vid.currentTime === 0 && !vid.paused)){
+      console.warn('mpegts: stalled 10s');
+      player.destroy(); S.tsInst = null;
+      showVidError(
+        'Stream demorou muito para carregar.',
+        'Pode ser lentidão do servidor. Tente ↺ Tentar novamente ou escolha outro episódio.'
+      );
+    }
+  }, 10000);
+
+  player.on(mpegts.Events.ERROR, (errType, errDetail, info) => {
+    clearTimeout(watchdog);
+    console.error('mpegts error:', errType, errDetail, info);
+    player.destroy(); S.tsInst = null;
+    if(errType === mpegts.ErrorTypes.NETWORK_ERROR){
+      const status = info && info.code ? ` (HTTP ${info.code})` : '';
+      showVidError(
+        `Conteúdo indisponível${status}.`,
+        'Episódio offline ou fora do plano. Tente recarregar a playlist (↺ Recarregar).'
+      );
+    } else if(errType === mpegts.ErrorTypes.MEDIA_ERROR){
+      showVidError(
+        'Formato não suportado pelo navegador.',
+        'Este episódio pode usar H.265/HEVC. Abra o VLC e cole a URL para assistir.'
+      );
+    } else {
+      showVidError(
+        'Erro no stream.',
+        `Detalhe: ${errDetail||errType}. Tente outro episódio.`
+      );
+    }
+  });
+
+  vid.addEventListener('playing', () => { clearTimeout(watchdog); S._mpegtsTriedUrls&&S._mpegtsTriedUrls.delete(url); }, {once:true});
+
+  if(S.cfg.autoplay) vid.play().catch(e=>{
+    if(e.name !== 'NotAllowedError') console.warn('play():', e.message);
+  });
 }
 
 function tryNative(vid, url){
@@ -942,7 +1101,7 @@ function tryNative(vid, url){
   vid.onerror = null;
   if(S.cfg.autoplay){
     vid.play().catch(e=>{
-      if(e.name === 'NotAllowedError') return; // só política de autoplay, não é erro
+      if(e.name === 'NotAllowedError') return;
       console.warn('play() rejected:', e.name, e.message);
     });
   }
@@ -951,9 +1110,10 @@ function tryNative(vid, url){
     const code = vid.error ? vid.error.code : 0;
     console.warn('video error code:', code, vid.error);
     if(code === 3 || code === 4){
-      if(typeof mpegts !== 'undefined' && mpegts.isSupported()){
+      const alreadyTried = S._mpegtsTriedUrls && S._mpegtsTriedUrls.has(url);
+      if(!alreadyTried && typeof mpegts !== 'undefined' && mpegts.isSupported()){
         console.log('Native falhou (código '+code+'), tentando mpegts.js...');
-        playMpegTS(vid, url, false); // VOD — não é live
+        playMpegTS(vid, url, false);
         return;
       }
     }
@@ -967,6 +1127,32 @@ function showVidError(msg, tip){
   const tipEl = document.getElementById('verr-tip');
   if(tipEl) tipEl.textContent = tip || '';
   document.getElementById('verr').classList.add('show');
+  // Mostra botão VLC se for erro de codec
+  const vlcBtn = document.getElementById('vlc-btn');
+  if(vlcBtn){
+    const isCodecError = msg.toLowerCase().includes('formato') || msg.toLowerCase().includes('codec') || msg.toLowerCase().includes('h.265') || msg.toLowerCase().includes('suportado');
+    vlcBtn.style.display = isCodecError ? 'inline-flex' : 'none';
+  }
+}
+
+function openInVLC(){
+  if(!S.currentUrl) return;
+  // Extrai URL real (sem proxy) para passar ao VLC
+  let rawUrl = S.currentUrl;
+  try {
+    const u = new URL(S.currentUrl);
+    rawUrl = u.searchParams.get('url') || S.currentUrl;
+    rawUrl = decodeURIComponent(rawUrl);
+  } catch(e){}
+  // vlc:// protocol abre o VLC diretamente
+  const vlcLink = 'vlc://' + rawUrl;
+  window.open(vlcLink, '_blank');
+  // Fallback: copia URL para clipboard
+  navigator.clipboard.writeText(rawUrl).then(()=>{
+    notify('URL copiada! Abra o VLC → Mídia → Abrir URL de rede');
+  }).catch(()=>{
+    prompt('Copie esta URL e cole no VLC (Mídia → Abrir URL):', rawUrl);
+  });
 }
 
 // Testa se uma URL está acessível pelo proxy e retorna status
@@ -981,7 +1167,9 @@ async function checkUrl(url){
 }
 
 function retryStream(){
-  if(S.currentUrl) playStream(S.currentUrl, S.currentName||'', S.currentSub||'');
+  if(!S.currentUrl) return;
+  S._mpegtsTriedUrls = new Set(); // limpa histórico de tentativas
+  playStream(S.currentUrl, S.currentName||'', S.currentSub||'');
 }
 
 function setVol(v){
@@ -1003,45 +1191,85 @@ const PROXIES=[
   u=>`https://corsproxy.io/?${encodeURIComponent(u)}`,
   u=>`https://proxy.cors.sh/${u}`,
 ];
+// Proxy CORS que funcionou por último (salvo entre sessões)
+let _bestProxy = localStorage.getItem('sb_best_proxy') || null;
+
 async function fetchM3U(url, onP){
-  // Se proxy local ativo, usa o endpoint /playlist que baixa e reescreve o M3U
+  // ── Com proxy local: usa /playlist (melhor opção — cache de 5min) ────────
   if(IS_PROXY){
-    if(onP) onP('Baixando via proxy local...', 30);
-    const proxyPL = proxyPlaylistUrl(url);
+    if(onP) onP('Baixando playlist...', 10);
     try{
-      const ctrl = new AbortController();
-      const t = setTimeout(()=>ctrl.abort(), 30000);
-      const r = await fetch(proxyPL, {signal: ctrl.signal});
-      clearTimeout(t);
+      const r = await fetch(proxyPlaylistUrl(url), {signal: AbortSignal.timeout(120000)});
       if(!r.ok) throw new Error('HTTP '+r.status);
+      // Verifica se veio do cache
+      const fromCache = r.headers.get('X-Cache') === 'HIT';
+      if(fromCache) { if(onP) onP('Carregado do cache!', 90); }
+      else { if(onP) onP('Baixando... (pode demorar na 1ª vez)', 30); }
       const txt = await r.text();
-      if(!txt || txt.length < 10) throw new Error('Resposta vazia');
-      if(onP) onP('Playlist recebida...', 65);
-      return txt;
+      if(txt && txt.length > 10){
+        if(onP) onP('Playlist pronta!', 95);
+        return txt;
+      }
+      throw new Error('Resposta vazia');
     }catch(e){
-      console.warn('Proxy playlist failed, trying direct:', e.message);
-      // fallthrough para tentativa direta
+      console.warn('Proxy /playlist falhou:', e.message);
+      if(onP) onP('Proxy falhou, tentando alternativas...', 40);
     }
   }
 
-  // Sem proxy: tenta direto + proxies CORS externos
-  let lastErr='';
-  for(let i=0;i<PROXIES.length;i++){
-    const pu=PROXIES[i](url);
-    if(onP) onP(`Tentando ${i===0?'conexão direta':'proxy '+i}...`,(i/PROXIES.length)*55);
-    try{
-      const ctrl=new AbortController();
-      const t=setTimeout(()=>ctrl.abort(),18000);
-      const r=await fetch(pu,{signal:ctrl.signal});
-      clearTimeout(t);
-      if(!r.ok){lastErr=`HTTP ${r.status}`;continue;}
-      const txt=await r.text();
-      if(!txt||txt.length<20){lastErr='Resposta vazia';continue;}
-      if(onP) onP('Conteúdo recebido...',65);
-      return txt;
-    }catch(e){ lastErr=e.name==='AbortError'?'Timeout':e.message; }
+  const CORS_PROXIES = [
+    { id:'allorigins',   build: u => `https://api.allorigins.win/raw?url=${encodeURIComponent(u)}` },
+    { id:'corsproxy.io', build: u => `https://corsproxy.io/?${encodeURIComponent(u)}` },
+    { id:'cors.sh',      build: u => `https://proxy.cors.sh/${u}` },
+  ];
+
+  // Se tem proxy que funcionou antes, tenta ele primeiro (mais rápido)
+  if(_bestProxy){
+    const best = CORS_PROXIES.find(p => p.id === _bestProxy);
+    if(best){
+      if(onP) onP(`Conectando via ${best.id}...`, 20);
+      try{
+        const r = await fetch(best.build(url), {signal: AbortSignal.timeout(25000)});
+        if(r.ok){
+          const txt = await r.text();
+          if(txt && txt.length > 10){
+            if(onP) onP('Recebido!', 70);
+            return txt;
+          }
+        }
+      }catch(e){ console.log(`Best proxy ${_bestProxy} falhou, tentando todos...`); }
+    }
   }
-  throw new Error(lastErr||'Todos os métodos falharam');
+
+  // Tenta direto + todos proxies em paralelo
+  if(onP) onP('Conectando...', 25);
+  const attempts = [
+    // direto
+    fetch(url, {signal: AbortSignal.timeout(8000)})
+      .then(r => r.ok ? r.text() : Promise.reject())
+      .then(t => t && t.length > 10 ? { txt: t, id: 'direto' } : Promise.reject()),
+    // proxies CORS
+    ...CORS_PROXIES.map(p =>
+      fetch(p.build(url), {signal: AbortSignal.timeout(25000)})
+        .then(r => r.ok ? r.text() : Promise.reject(r.status))
+        .then(t => t && t.length > 10 ? { txt: t, id: p.id } : Promise.reject('vazio'))
+    )
+  ];
+
+  try {
+    const { txt, id } = await Promise.any(attempts);
+    if(id !== 'direto'){
+      _bestProxy = id;
+      localStorage.setItem('sb_best_proxy', id);
+      console.log(`✓ Melhor proxy salvo: ${id}`);
+    }
+    if(onP) onP(`Recebido via ${id}!`, 70);
+    return txt;
+  } catch(e) {
+    _bestProxy = null;
+    localStorage.removeItem('sb_best_proxy');
+    throw new Error('Todos os métodos falharam. Salve o .m3u no navegador e importe pela aba Arquivo.');
+  }
 }
 
 // ─── PARSE M3U ───────────────────────────────────────────────────────────────
@@ -1188,8 +1416,7 @@ function buildLiveCats(){
     (hidden.length?`<div class="cat-label" style="margin-top:8px">Ocultas (${hidden.length})</div>`+
       hidden.map((g,i)=>makeCatItem(g,i,false)).join(''):'');
 
-  selCat(null, el.querySelector('.cat-item'));;
-  selCat(null,el.querySelector('.cat-item'));
+  selCat(null, el.querySelector('.cat-item'));
 }
 function selCat(cat,el){
   document.querySelectorAll('#cat-list .cat-item').forEach(e=>e.classList.remove('active'));
@@ -1227,10 +1454,14 @@ function buildMovieCats(){
   const cnt={};S.movies.forEach(m=>{cnt[m.group]=(cnt[m.group]||0)+1;});
   const el=document.getElementById('mcat-list');
   if(!S.mCats.length){el.innerHTML='<div class="empty"><div class="empty-ico">🎬</div><p>Sem filmes</p></div>';return;}
+  const sorted=[...S.mCats].filter(g=>!isCatHidden(g)).sort((a,b)=>{
+    const oa=getCatOrder(a),ob=getCatOrder(b);
+    return oa!==ob?oa-ob:getCatLabel(a).localeCompare(getCatLabel(b));
+  });
   el.innerHTML='<div class="cat-label">Categorias</div>'+
-    [{name:'Todos',all:true,count:S.movies.length},...S.mCats.map(g=>({name:g,count:cnt[g]||0}))]
-    .map((c,i)=>`<div class="cat-item${i===0?' active':''}" onclick="selMCat(${c.all?'null':`'${esc(c.name)}'`},this)">
-      <div class="cat-ico">🎬</div><div class="cat-n">${c.name}</div><div class="cat-cnt">${c.count}</div>
+    [{orig:null,label:'Todos',count:S.movies.length},...sorted.map(g=>({orig:g,label:getCatLabel(g),count:cnt[g]||0}))]
+    .map((c,i)=>`<div class="cat-item${i===0?' active':''}" onclick="selMCat(${c.orig===null?'null':`'${esc(c.orig)}'`},this)">
+      <div class="cat-ico">🎬</div><div class="cat-n">${esc(c.label)}</div><div class="cat-cnt">${c.count}</div>
     </div>`).join('');
   renderVOD('movies',S.movies);
 }
@@ -1243,10 +1474,14 @@ function buildSeriesCats(){
   const cnt={};S.series.forEach(s=>{cnt[s.group]=(cnt[s.group]||0)+1;});
   const el=document.getElementById('scat-list');
   if(!S.sCats.length){el.innerHTML='<div class="empty"><div class="empty-ico">📂</div><p>Sem séries</p></div>';return;}
+  const sorted=[...S.sCats].filter(g=>!isCatHidden(g)).sort((a,b)=>{
+    const oa=getCatOrder(a),ob=getCatOrder(b);
+    return oa!==ob?oa-ob:getCatLabel(a).localeCompare(getCatLabel(b));
+  });
   el.innerHTML='<div class="cat-label">Categorias</div>'+
-    [{name:'Todas',all:true,count:S.series.length},...S.sCats.map(g=>({name:g,count:cnt[g]||0}))]
-    .map((c,i)=>`<div class="cat-item${i===0?' active':''}" onclick="selSCat(${c.all?'null':`'${esc(c.name)}'`},this)">
-      <div class="cat-ico">📂</div><div class="cat-n">${c.name}</div><div class="cat-cnt">${c.count}</div>
+    [{orig:null,label:'Todas',count:S.series.length},...sorted.map(g=>({orig:g,label:getCatLabel(g),count:cnt[g]||0}))]
+    .map((c,i)=>`<div class="cat-item${i===0?' active':''}" onclick="selSCat(${c.orig===null?'null':`'${esc(c.orig)}'`},this)">
+      <div class="cat-ico">📂</div><div class="cat-n">${esc(c.label)}</div><div class="cat-cnt">${c.count}</div>
     </div>`).join('');
   renderVOD('series',S.series);
 }
@@ -1255,27 +1490,83 @@ function selSCat(cat,el){
   if(el) el.classList.add('active'); S.aSC=cat;
   renderVOD('series',cat?S.series.filter(s=>s.group===cat):S.series);
 }
-function renderVOD(type,items){
-  const gid=type==='movies'?'movie-grid':'series-grid';
-  const cid=type==='movies'?'mv-count':'sr-count';
-  const ico2=type==='movies'?'🎬':'📂';
-  const el=document.getElementById(gid);
-  document.getElementById(cid).textContent=items.length+' itens';
-  if(!items.length){el.innerHTML=`<div class="empty" style="grid-column:1/-1"><p>Sem resultados</p></div>`;return;}
-  const show=items.slice(0,300);
-  el.innerHTML=show.map(m=>`
-    <div class="vod-card" onclick="playVOD('${esc(m.url)}','${esc(m.name)}','${esc(m.group)}')">
+function sortVOD(items) {
+  // Ordena: temporadas/episódios mais recentes primeiro
+  // Detecta padrão SxxExx e ordena decrescente para séries
+  return [...items].sort((a, b) => {
+    const na = a.name, nb = b.name;
+    // Extrai número de temporada/episódio se existir
+    const ma = na.match(/S(\d+)E(\d+)/i), mb = nb.match(/S(\d+)E(\d+)/i);
+    if(ma && mb) {
+      // Mesma série? Ordena por temporada desc, depois episódio desc
+      const baseA = na.replace(/S\d+E\d+.*/i,'').trim();
+      const baseB = nb.replace(/S\d+E\d+.*/i,'').trim();
+      if(baseA === baseB) {
+        const sA = parseInt(ma[1]), sB = parseInt(mb[1]);
+        if(sA !== sB) return sB - sA; // temporada mais alta primeiro
+        return parseInt(mb[2]) - parseInt(ma[2]); // episódio mais alto primeiro
+      }
+    }
+    // Sem padrão: alfabético
+    return na.localeCompare(nb, 'pt-BR');
+  });
+}
+
+function renderVOD(type, items, _sorted){
+  const gid = type==='movies' ? 'movie-grid' : 'series-grid';
+  const cid = type==='movies' ? 'mv-count' : 'sr-count';
+  const el = document.getElementById(gid);
+  document.getElementById(cid).textContent = items.length.toLocaleString()+' itens';
+  if(!items.length){ el.innerHTML=`<div class="empty" style="grid-column:1/-1"><p>Sem resultados</p></div>`; return; }
+
+  // Ordena se não já ordenado
+  const sorted = _sorted ? items : sortVOD(items);
+  const PAGE = 200;
+  const show = sorted.slice(0, PAGE);
+
+  el.innerHTML = show.map(m => {
+    const hasLogo = m.logo && m.logo.startsWith('http');
+    return `<div class="vod-card" onclick="playVOD('${esc(m.url)}','${esc(m.name)}','${esc(m.group)}')">
       <div class="vod-thumb">
-        ${m.logo?`<img src="${m.logo}" onerror="this.parentNode.innerHTML='${ico2}'" loading="lazy">`:''}
-        ${m.logo?'':ico2}
-        <div class="vod-overlay"><div class="vod-play"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+        ${hasLogo ? `<img src="${m.logo}" onerror="this.style.display='none'" loading="lazy">` : ''}
+        <div class="vod-no-img" style="${hasLogo?'display:none':''}">
+          <div style="font-size:28px;opacity:.3">${type==='movies'?'🎬':'📺'}</div>
+        </div>
+        <div class="vod-overlay">
+          <div class="vod-play-btn">
+            <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+          </div>
+        </div>
+        <div class="vod-badge">${m.group.replace(/^(filmes?|series?|movies?)\s*[✨\*²¹³]?\s*/i,'').substring(0,20)||m.group.substring(0,20)}</div>
       </div>
       <div class="vod-body">
         <div class="vod-name">${m.name}</div>
-        <div class="vod-cat">${m.group}</div>
       </div>
-    </div>`).join('')+
-    (items.length>300?`<div class="empty" style="grid-column:1/-1;font-size:11px">+${items.length-300} itens — use a busca</div>`:'');
+    </div>`;
+  }).join('');
+
+  // Load more button
+  if(sorted.length > PAGE) {
+    const moreDiv = document.createElement('div');
+    moreDiv.className = 'load-more-wrap';
+    moreDiv.innerHTML = `<button class="load-more-btn" onclick="renderVOD('${type}',[],true); this.closest('.load-more-wrap').remove(); document.getElementById('${gid}').insertAdjacentHTML('beforeend', window._vodMore_${type})">
+      Carregar mais ${sorted.length - PAGE} itens
+    </button>`;
+    // Store the rest
+    window['_vodMore_'+type] = sorted.slice(PAGE).map(m => {
+      const hasLogo = m.logo && m.logo.startsWith('http');
+      return `<div class="vod-card" onclick="playVOD('${esc(m.url)}','${esc(m.name)}','${esc(m.group)}')">
+        <div class="vod-thumb">
+          ${hasLogo ? `<img src="${m.logo}" onerror="this.style.display='none'" loading="lazy">` : ''}
+          <div class="vod-no-img" style="${hasLogo?'display:none':''}"><div style="font-size:28px;opacity:.3">${type==='movies'?'🎬':'📺'}</div></div>
+          <div class="vod-overlay"><div class="vod-play-btn"><svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg></div></div>
+          <div class="vod-badge">${m.group.substring(0,20)}</div>
+        </div>
+        <div class="vod-body"><div class="vod-name">${m.name}</div></div>
+      </div>`;
+    }).join('');
+    el.after(moreDiv);
+  }
 }
 function searchVOD(type,q){
   const base=type==='movies'?(S.aMC?S.movies.filter(m=>m.group===S.aMC):S.movies):(S.aSC?S.series.filter(s=>s.group===S.aSC):S.series);
@@ -1552,16 +1843,49 @@ function init(){
   if(S.playlists.length){
     const last=S.playlists[S.playlists.length-1];
     if(last.url){
-      setStatus(false,'Recarregando...');
-      showP();
-      fetchM3U(last.url,(l,p)=>setP(l,p))
+      // Tenta recarregar em background, mas não bloqueia UI
+      // Se falhar, usa dados em cache do localStorage (se houver)
+      setStatus(false,'Atualizando playlist...');
+      document.getElementById('reload-btn').style.display='inline';
+      document.getElementById('reload-btn').textContent='⏳ Atualizando...';
+      document.getElementById('reload-btn').disabled=true;
+      fetchM3U(last.url,(l,p)=>{
+        document.getElementById('sdot').className='dot loading';
+        document.getElementById('stxt').textContent=l;
+      })
         .then(txt=>processPlaylist(last,txt))
-        .then(s=>notify(`${(s.ch+s.mv+s.sr).toLocaleString()} itens carregados`))
-        .catch(()=>{hideP();setStatus(false,'Erro ao carregar');});
+        .then(s=>{
+          notify(`Playlist atualizada — ${(s.ch+s.mv+s.sr).toLocaleString()} itens`);
+          document.getElementById('reload-btn').textContent='↺ Recarregar';
+          document.getElementById('reload-btn').disabled=false;
+        })
+        .catch(e=>{
+          hideP();
+          // Mesmo se falhar o reload, tenta usar dados da última playlist em cache
+          setStatus(false,'Offline — usando cache');
+          document.getElementById('reload-btn').textContent='↺ Tentar novamente';
+          document.getElementById('reload-btn').disabled=false;
+          console.warn('Auto-reload falhou:', e.message);
+        });
     }
   }
 }
 init();
+
+
+// ─── SORT AND RENDER ──────────────────────────────────────────────────────────
+function sortAndRender(type, sortBy) {
+  const base = type === 'movies'
+    ? (S.aMC ? S.movies.filter(m => m.group === S.aMC) : S.movies)
+    : (S.aSC ? S.series.filter(s => s.group === S.aSC) : S.series);
+  
+  let sorted;
+  if(sortBy === 'az') sorted = [...base].sort((a,b) => a.name.localeCompare(b.name,'pt-BR'));
+  else if(sortBy === 'za') sorted = [...base].sort((a,b) => b.name.localeCompare(a.name,'pt-BR'));
+  else sorted = sortVOD(base); // newest/default
+  
+  renderVOD(type, sorted, true);
+}
 </script>
 </body>
 </html>
